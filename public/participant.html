@@ -8,15 +8,81 @@
     <title>Participant View</title>
     <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
     <script src="index.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <h1>This is the participant view</h1>
+    <div id="WaitingRoomContainer">
+      <div id="banner">
+        <h1>You're on the waiting Room. Please wait for the host to join</h1>
+      </div>
+
+      <div id="preview"></div>
+
+      <div id="controls">
+        <div class="iconButton" id="cameraButton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="56"
+            height="56"
+            fill="currentColor"
+            class="bi bi-camera-video-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"
+            />
+          </svg>
+        </div>
+        <div class="iconButton" id="micButton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="56"
+            height="56"
+            fill="currentColor"
+            class="bi bi-mic-fill"
+            viewBox="0 0 16 16"
+          >
+            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+            <path
+              d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Select audio source</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Select video source</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
     <div id="publisher"></div>
 
     <div id="subscribers"></div>
   </body>
   <script>
     const basicUrl = 'http://localhost:3000';
+    const publisherOptions = {
+      insertMode: 'append',
+      width: '60%',
+      height: '60%'
+    };
+    let WaitingRoompublisher = null;
+    let hasVideo = true;
+    let hasAudio = true;
 
     async function getCredentials() {
       // Default
@@ -40,7 +106,72 @@
     }
 
     getCredentials().then(data => {
-      initializeSession(data);
+      initializeWaitingRoom(data);
+    });
+
+    function initializeWaitingRoom(data) {
+      const { apiKey, sessionId, token } = data;
+      session = OT.initSession(apiKey, sessionId);
+
+      session.on('connectionCreated', function(event) {
+        console.log('[connectionCreated]', connectionCount);
+        console.log(event.connection);
+        if (event.connection.connectionId !== session.connection.connectionId) {
+          connectionCount += 1;
+          // handlePublisher();
+        }
+      });
+
+      session.on('connectionDestroyed', function(event) {
+        console.log('[connectionDestroyed]', connectionCount);
+        if (event.connection.connectionId !== session.connection.connectionId) {
+          connectionCount -= 1;
+          handlePublisher();
+        }
+      });
+
+      // initialize the publisher
+
+      WaitingRoompublisher = OT.initPublisher(
+        'preview',
+        publisherOptions,
+        handleError
+      );
+      //   publisher.on('streamCreated', event => {
+      //     console.log('[Publisher] - streamCreated', event.reason);
+      //     isPublishing = true;
+      //   });
+      //   publisher.on('streamDestroyed', event => {
+      //     console.log('[Publisher] - streamDestroyed', event.reason);
+      //     event.preventDefault();
+      //     isPublishing = false;
+      //   });
+
+      // Connect to the session
+      session.connect(token, function callback(error) {
+        if (error) {
+          handleError(error);
+        } else {
+          console.log('Session Connected');
+        }
+      });
+    }
+
+    const toggleVideo = () => {
+      hasVideo = !hasVideo;
+      WaitingRoompublisher.publishVideo(hasVideo);
+    };
+
+    const toggleAudio = () => {
+      hasAudio = !hasAudio;
+      WaitingRoompublisher.publishAudio(hasAudio);
+    };
+    document.getElementById('cameraButton').addEventListener('click', () => {
+      toggleVideo();
+    });
+
+    document.getElementById('micButton').addEventListener('click', () => {
+      toggleAudio();
     });
   </script>
 </html>

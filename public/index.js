@@ -24,7 +24,6 @@ function handlePublisher() {
 
 function initializeSession(data) {
   const { apiKey, sessionId, token } = data;
-  console.log(data);
   session = OT.initSession(apiKey, sessionId);
 
   session.on('connectionCreated', function(event) {

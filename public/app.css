@@ -25,6 +25,43 @@ html {
   bottom: 10px;
   left: 10px;
   z-index: 100;
-  border: 3px solid white;
+  /* border: 3px solid white; */
   border-radius: 3px;
+}
+#preview {
+  position: absolute;
+  width: 720px;
+  height: 480px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  /* left: 10px; */
+  z-index: 100;
+  /* border: 3px solid white; */
+  border-radius: 3px;
+}
+
+#controls {
+  background-color: white;
+  height: 90px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  position: absolute;
+  bottom: 0;
+}
+
+.iconButton {
+  width: 50px;
+  height: 50px;
+  margin: 20px 10px !important;
+  border: 1px solid white;
+  border-radius: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
