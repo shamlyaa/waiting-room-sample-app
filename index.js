@@ -45,6 +45,7 @@ const sendSessionInfo = (res, session, role) => {
 
 app.get('/api/room/:roomName', (req, res) => {
   const { role } = req.query;
+  console.log(role);
   const roomName = req.params.roomName;
   if (sessions[roomName]) {
     return sendSessionInfo(res, sessions[roomName], role);

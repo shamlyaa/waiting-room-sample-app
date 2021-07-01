@@ -4,9 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <link rel="stylesheet" href="app.css" />
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+    <script src="index.js"></script>
+    <script>
+      const basicUrl = 'http://localhost:3000';
+      let roomApiKey;
+      let roomSessionId;
+      let roomToken;
+
+      async function getCredentials() {
+        try {
+          const url = `/api/room/${roomName}?role=admin`;
+          const config = {};
+          const response = await fetch(`${basicUrl}${url}`, config);
+          const data = await response.json();
+          console.log(data);
+          if (data.apiKey && data.sessionId && data.token) {
+            roomApiKey = data.apiKey;
+            roomSessionId = data.sessionId;
+            roomToken = data.token;
+            return Promise.resolve(data);
+          }
+        } catch (error) {
+          console.log(error.message);
+          return Promise.reject(error);
+        }
+      }
+
+      getCredentials().then(data => {
+        initializeSession(data);
+      });
+    </script>
+    <title>Host view</title>
   </head>
   <body>
     <h1>This is the host view</h1>
+
+    <div id="publisher"></div>
+
+    <div id="subscribers"></div>
   </body>
 </html>

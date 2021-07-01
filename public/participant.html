@@ -4,9 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <link rel="stylesheet" href="app.css" />
+    <title>Participant View</title>
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+    <script src="index.js"></script>
   </head>
   <body>
     <h1>This is the participant view</h1>
+    <div id="publisher"></div>
+
+    <div id="subscribers"></div>
   </body>
+  <script>
+    const basicUrl = 'http://localhost:3000';
+
+    async function getCredentials() {
+      // Default
+      try {
+        const url = `/api/room/${roomName}?role=participant`;
+        const config = {};
+        const response = await fetch(`${basicUrl}${url}`, config);
+        const data = await response.json();
+        console.log(data);
+        if (data.apiKey && data.sessionId && data.token) {
+          roomApiKey = data.apiKey;
+          roomSessionId = data.sessionId;
+          roomToken = data.token;
+          return Promise.resolve(data);
+        }
+        return Promise.reject(new Error('Credentials Not Valid'));
+      } catch (error) {
+        console.log(error.message);
+        return Promise.reject(error);
+      }
+    }
+
+    getCredentials().then(data => {
+      initializeSession(data);
+    });
+  </script>
 </html>
