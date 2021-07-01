@@ -31,8 +31,9 @@ app.get('/', (req, res) => {
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 const sendSessionInfo = (res, session, role) => {
-  console.log('gen token for ' + role);
-  const token = session.generateToken(session.sessionId, {
+  console.log('generating token for ' + role);
+
+  const token = opentok.generateToken(session.sessionId, {
     data: `${role}`,
     role: role === 'admin' ? 'moderator' : 'publisher'
   });
