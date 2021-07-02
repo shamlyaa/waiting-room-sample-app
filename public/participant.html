@@ -20,6 +20,25 @@
         <h1>You're on the waiting Room. Please wait for the host to join</h1>
       </div>
 
+      <div id="controls">
+        <!-- <div class="iconButton" id="cameraButton"> -->
+        <button class="iconButton" id="cameraButton">
+          <img
+            src="./icons/camera-video-fill.svg"
+            id="cameraIcon"
+            alt=""
+            width="100%"
+          />
+        </button>
+
+        <button class="iconButton" id="micButton">
+          <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
+        </button>
+
+        <div><progress id="progress" max="100" value="0"> 0% </progress></div>
+      </div>
+    </div>
+    <div id="publisher">
       <div id="preview">
         <div id="audioVideoSettings">
           <select
@@ -39,28 +58,9 @@
           </select>
         </div>
       </div>
-
-      <div id="controls">
-        <!-- <div class="iconButton" id="cameraButton"> -->
-        <button class="iconButton" id="cameraButton">
-          <img
-            src="./icons/camera-video-fill.svg"
-            id="cameraIcon"
-            alt=""
-            width="100%"
-          />
-        </button>
-
-        <button class="iconButton" id="micButton">
-          <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
-        </button>
-
-        <div><progress id="progress" max="100" value="0"> 0% </progress></div>
-      </div>
     </div>
-    <div id="publisher"></div>
 
-    <div id="subscribers"></div>
+    <div id="subscriber"></div>
   </body>
   <script>
     const basicUrl = 'http://localhost:3000';
@@ -68,11 +68,11 @@
     const micButton = document.getElementById('micButton');
     const publisherOptions = {
       insertMode: 'append',
-      width: '60%',
-      height: '60%'
+      width: '100%',
+      height: '100%'
     };
     let session = null;
-    let WaitingRoompublisher = null;
+    let waitingRoompublisher = null;
     let hasVideo = true;
     let hasAudio = true;
     let isPublishing = false;
@@ -113,18 +113,20 @@
         usersConnected.push(event.connection);
         console.log(usersConnected);
 
-        console.log('hOST IS PRESENT? ' + isHostPresent());
-        if (isHostPresent()) handlePublisher(WaitingRoompublisher);
+        if (isHostPresent() || event.connection.data === 'admin') {
+          handlePublisher(waitingRoompublisher);
+        }
       });
 
       session.on('connectionDestroyed', event => {
-        // isHostPresent();
+        console.log('destroyyy');
+        connectionCount -= 1;
         console.log('[connectionDestroyed]', connectionCount);
         usersConnected.filter(
           connection => connection.id != event.connection.id
         );
-        console.log(usersConnected);
         connectionCount -= 1;
+        console.log(usersConnected);
       });
 
       session.on('streamCreated', event => {
@@ -136,7 +138,7 @@
         };
         session.subscribe(
           event.stream,
-          'subscribers',
+          'subscriber',
           subscriberOptions,
           handleError
         );
@@ -144,13 +146,13 @@
 
       // initialize the publisher
 
-      WaitingRoompublisher = OT.initPublisher(
-        'preview',
+      waitingRoompublisher = OT.initPublisher(
+        'publisher',
         publisherOptions,
         handleError
       );
 
-      WaitingRoompublisher.on({
+      waitingRoompublisher.on({
         accessAllowed: event => {
           console.log('accessAllowed');
           refreshDeviceList();
@@ -165,6 +167,9 @@
         streamCreated: e => {
           console.log('the participant started streaming');
           isPublishing = true;
+        },
+        streamDestroyed: e => {
+          isPublishing = false;
         }
       });
 
@@ -178,12 +183,22 @@
       });
     }
 
+    // function handlePublisher(pub) {
+    //   console.log('[handlePublish]', pub);
+    //   if (!isPublishing) {
+    //     // todo publish twice the same stream explode everything
+    //     session.publish(pub, handleError);
+    //   } else if (isPublishing && pub) {
+    //     session.unpublish(pub);
+    //   }
+    // }
+
     function handlePublisher(pub) {
       console.log('[handlePublish]', pub);
-      if (!isPublishing) {
+      if (!isPublishing && connectionCount > 1) {
         // todo publish twice the same stream explode everything
         session.publish(pub, handleError);
-      } else if (connectionCount === 0 && pub) {
+      } else if (connectionCount === 1 && pub) {
         session.unpublish(pub);
       }
     }
@@ -215,7 +230,7 @@
         document.getElementById('cameraIcon').src =
           './icons/camera-video-fill.svg';
       }
-      WaitingRoompublisher.publishVideo(hasVideo);
+      waitingRoompublisher.publishVideo(hasVideo);
     };
 
     const toggleAudio = () => {
@@ -226,7 +241,7 @@
         document.getElementById('micIcon').src = './icons/mic-fill.svg';
       }
 
-      WaitingRoompublisher.publishAudio(hasAudio);
+      waitingRoompublisher.publishAudio(hasAudio);
     };
 
     cameraButton.addEventListener('click', () => {
@@ -234,9 +249,8 @@
     });
 
     document.getElementById('videoInputs').addEventListener('change', e => {
-      onVideoSourceChanged(e, WaitingRoompublisher);
+      onVideoSourceChanged(e, waitingRoompublisher);
     });
-
     navigator.mediaDevices.ondevicechange = () => {
       console.log('Media Devices change detected, refreshing list');
       refreshDeviceList();

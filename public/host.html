@@ -114,9 +114,11 @@
       session.on('connectionDestroyed', function(event) {
         connectionCount -= 1;
         console.log('[connectionDestroyed]', connectionCount);
-        usersConnected.filter(
-          connection => connection.id != event.connection.id
-        );
+        console.log(event.connection);
+        usersConnected.filter(e => {
+          console.log(e.id);
+          e.id != event.connection.connectionId;
+        });
         console.log(usersConnected);
 
         // handlePublisher(publisher);
@@ -157,7 +159,7 @@
       publisher.on('streamDestroyed', event => {
         console.log('[Publisher] - streamDestroyed', event.reason);
         event.preventDefault();
-        // isPublishing = false;
+        isPublishing = false;
       });
       publisher.on('audioLevelUpdated', event => {
         calculateAudioLevel(event.audioLevel);
@@ -182,7 +184,7 @@
       if (!isPublishing) {
         // todo publish twice the same stream explode everything
         session.publish(pub, handleError);
-      } else if (connectionCount === 0 && pub) {
+      } else if (connectionCount === 1 && pub) {
         session.unpublish(pub);
       }
     }
