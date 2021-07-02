@@ -71,9 +71,11 @@
       width: '60%',
       height: '60%'
     };
+    let session = null;
     let WaitingRoompublisher = null;
     let hasVideo = true;
     let hasAudio = true;
+    let isPublishing = false;
     // let usersConnected = [];
 
     async function getCredentials() {
@@ -113,13 +115,13 @@
 
         console.log('hOST IS PRESENT? ' + isHostPresent());
         if (isHostPresent()) handlePublisher(WaitingRoompublisher);
-        if (event.connection.connectionId !== session.connection.connectionId) {
-          // handlePublisher();
-        }
+        // if (event.connection.connectionId !== session.connection.connectionId) {
+        //   // handlePublisher();
+        // }
       });
 
       session.on('connectionDestroyed', event => {
-        isHostPresent();
+        // isHostPresent();
         console.log('[connectionDestroyed]', connectionCount);
         usersConnected.filter(
           connection => connection.id != event.connection.id
@@ -129,7 +131,7 @@
       });
 
       session.on('streamCreated', event => {
-        console.log('event');
+        // console.log('event');
         const subscriberOptions = {
           insertMode: 'append',
           width: '60%',
@@ -164,6 +166,7 @@
           calculateAudioLevel(e.audioLevel);
         },
         streamCreated: e => {
+          console.log('the participant started streaming');
           isPublishing = true;
         }
       });
@@ -185,6 +188,16 @@
           console.log('Session Connected');
         }
       });
+    }
+
+    function handlePublisher(pub) {
+      console.log('[handlePublish]', pub);
+      if (!isPublishing) {
+        // todo publish twice the same stream explode everything
+        session.publish(pub, handleError);
+      } else if (connectionCount === 0 && pub) {
+        session.unpublish(pub);
+      }
     }
 
     const calculateAudioLevel = audioLevel => {
