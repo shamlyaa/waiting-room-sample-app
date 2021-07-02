@@ -136,6 +136,36 @@ listAudioInputs().then(devices => {
   }
 });
 
+async function getVideoInput(index) {
+  try {
+    const devices = await listVideoInputs();
+    if (devices.length > index) {
+      return Promise.resolve(devices[index]);
+    }
+
+    return Promise.resolve(null);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+async function onVideoSourceChanged(event, publisher) {
+  const value = event.target.value.replace('video-source-', '');
+  if (value === 'vg-default') {
+    return;
+  }
+
+  const index = parseInt(value, 10);
+  videoDeviceIndex = index;
+
+  if (videoDeviceIndex > -1) {
+    const videoDevice = await getVideoInput(videoDeviceIndex);
+    if (videoDevice != null) {
+      publisher.setVideoSource(videoDevice.deviceId);
+    }
+  }
+}
+
 function listInputs() {
   return new Promise((resolve, reject) => {
     OT.getDevices((error, devices) => {

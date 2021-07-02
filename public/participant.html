@@ -115,9 +115,6 @@
 
         console.log('hOST IS PRESENT? ' + isHostPresent());
         if (isHostPresent()) handlePublisher(WaitingRoompublisher);
-        // if (event.connection.connectionId !== session.connection.connectionId) {
-        //   // handlePublisher();
-        // }
       });
 
       session.on('connectionDestroyed', event => {
@@ -162,23 +159,14 @@
           alert('Please grant devices access');
           // The user has denied access to the camera and mic.
         },
-        audioLevelUpdated: e => {
-          calculateAudioLevel(e.audioLevel);
+        audioLevelUpdated: event => {
+          calculateAudioLevel(event.audioLevel);
         },
         streamCreated: e => {
           console.log('the participant started streaming');
           isPublishing = true;
         }
       });
-      //   publisher.on('streamCreated', event => {
-      //     console.log('[Publisher] - streamCreated', event.reason);
-      //     isPublishing = true;
-      //   });
-      //   publisher.on('streamDestroyed', event => {
-      //     console.log('[Publisher] - streamDestroyed', event.reason);
-      //     event.preventDefault();
-      //     isPublishing = false;
-      //   });
 
       // Connect to the session
       session.connect(token, error => {
@@ -243,6 +231,10 @@
 
     cameraButton.addEventListener('click', () => {
       toggleVideo();
+    });
+
+    document.getElementById('videoInputs').addEventListener('change', e => {
+      onVideoSourceChanged(e, WaitingRoompublisher);
     });
 
     navigator.mediaDevices.ondevicechange = () => {
