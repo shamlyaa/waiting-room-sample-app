@@ -20,7 +20,25 @@
         <h1>You're on the waiting Room. Please wait for the host to join</h1>
       </div>
 
-      <div id="preview"></div>
+      <div id="preview">
+        <div id="audioVideoSettings">
+          <select
+            id="audioInputs"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option selected>Chango Audio source</option>
+          </select>
+
+          <select
+            class="form-select"
+            id="videoInputs"
+            aria-label="Default select example"
+          >
+            <option selected>Change video source</option>
+          </select>
+        </div>
+      </div>
 
       <div id="controls">
         <!-- <div class="iconButton" id="cameraButton"> -->
@@ -36,21 +54,9 @@
         <button class="iconButton" id="micButton">
           <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
         </button>
+
+        <div><progress id="progress" max="100" value="0"> 0% </progress></div>
       </div>
-
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Select audio source</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
-
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Select video source</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
     </div>
     <div id="publisher"></div>
 
@@ -68,6 +74,7 @@
     let WaitingRoompublisher = null;
     let hasVideo = true;
     let hasAudio = true;
+    // let usersConnected = [];
 
     async function getCredentials() {
       // Default
@@ -99,20 +106,41 @@
       session = OT.initSession(apiKey, sessionId);
 
       session.on('connectionCreated', function(event) {
+        connectionCount += 1;
         console.log('[connectionCreated]', connectionCount);
-        console.log(event.connection);
+        usersConnected.push(event.connection);
+        console.log(usersConnected);
+
+        console.log('hOST IS PRESENT? ' + isHostPresent());
+        if (isHostPresent()) handlePublisher(WaitingRoompublisher);
         if (event.connection.connectionId !== session.connection.connectionId) {
-          connectionCount += 1;
           // handlePublisher();
         }
       });
 
-      session.on('connectionDestroyed', function(event) {
+      session.on('connectionDestroyed', event => {
+        isHostPresent();
         console.log('[connectionDestroyed]', connectionCount);
-        if (event.connection.connectionId !== session.connection.connectionId) {
-          connectionCount -= 1;
-          handlePublisher();
-        }
+        usersConnected.filter(
+          connection => connection.id != event.connection.id
+        );
+        console.log(usersConnected);
+        connectionCount -= 1;
+      });
+
+      session.on('streamCreated', event => {
+        console.log('event');
+        const subscriberOptions = {
+          insertMode: 'append',
+          width: '60%',
+          height: '60%'
+        };
+        session.subscribe(
+          event.stream,
+          'subscribers',
+          subscriberOptions,
+          handleError
+        );
       });
 
       // initialize the publisher
@@ -122,6 +150,23 @@
         publisherOptions,
         handleError
       );
+
+      WaitingRoompublisher.on({
+        accessAllowed: event => {
+          console.log('accessAllowed');
+          refreshDeviceList();
+        },
+        accessDenied: () => {
+          alert('Please grant devices access');
+          // The user has denied access to the camera and mic.
+        },
+        audioLevelUpdated: e => {
+          calculateAudioLevel(e.audioLevel);
+        },
+        streamCreated: e => {
+          isPublishing = true;
+        }
+      });
       //   publisher.on('streamCreated', event => {
       //     console.log('[Publisher] - streamCreated', event.reason);
       //     isPublishing = true;
@@ -133,7 +178,7 @@
       //   });
 
       // Connect to the session
-      session.connect(token, function callback(error) {
+      session.connect(token, error => {
         if (error) {
           handleError(error);
         } else {
@@ -141,6 +186,24 @@
         }
       });
     }
+
+    const calculateAudioLevel = audioLevel => {
+      let movingAvg = null;
+      if (movingAvg === null || movingAvg <= audioLevel) {
+        movingAvg = audioLevel;
+      } else {
+        movingAvg = 0.8 * movingAvg + 0.2 * audioLevel;
+      }
+      // console.log(movingAvg);
+      // 1.5 scaling to map the -30 - 0 dBm range to [0,1]
+      const currentLogLevel = Math.log(movingAvg) / Math.LN10 / 1.5 + 1;
+      setLogLevel(Math.min(Math.max(currentLogLevel, 0), 1) * 100);
+      // console.log(Math.min(Math.max(currentLogLevel, 0), 1) * 100);
+    };
+
+    const setLogLevel = logLevel => {
+      document.getElementById('progress').value = logLevel;
+    };
 
     const toggleVideo = () => {
       hasVideo = !hasVideo;
@@ -169,10 +232,20 @@
       toggleVideo();
     });
 
+    navigator.mediaDevices.ondevicechange = () => {
+      console.log('Media Devices change detected, refreshing list');
+      refreshDeviceList();
+    };
+
     micButton.addEventListener('click', () => {
       toggleAudio();
+    });
 
-      //   micButton.classList.remove('linkando-primary-bg');
+    document.getElementById('audioInputs').addEventListener('change', e => {
+      e.preventDefault();
+      const value = event.target.value.replace('audio-source-', '');
+      const index = parseInt(value, 10);
+      audioDeviceIndex = index;
     });
   </script>
 </html>

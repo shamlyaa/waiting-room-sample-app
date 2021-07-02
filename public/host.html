@@ -12,6 +12,32 @@
   </head>
   <body>
     <h1>This is the host view</h1>
+    <div id="controls">
+      <!-- <div class="iconButton" id="cameraButton"> -->
+      <button class="iconButton" id="cameraButton">
+        <img
+          src="./icons/camera-video-fill.svg"
+          id="cameraIcon"
+          alt=""
+          width="100%"
+        />
+      </button>
+
+      <button class="iconButton" id="micButton">
+        <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
+      </button>
+
+      <div><progress id="progress" max="100" value="0"> </progress></div>
+
+      <button class="iconButton" id="endCallButton">
+        <img
+          src="./icons/telephone-x-fill.svg"
+          id="endCallIcon"
+          alt=""
+          width="100%"
+        />
+      </button>
+    </div>
 
     <div id="publisher"></div>
     <div id="subscribers"></div>
@@ -43,6 +69,10 @@
 
     getCredentials().then(data => {
       initializeSession(data);
+    });
+
+    document.getElementById('endCallButton').addEventListener('click', () => {
+      disconnectAll();
     });
   </script>
 </html>
