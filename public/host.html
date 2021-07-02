@@ -115,10 +115,7 @@
         connectionCount -= 1;
         console.log('[connectionDestroyed]', connectionCount);
         console.log(event.connection);
-        usersConnected.filter(e => {
-          console.log(e.id);
-          e.id != event.connection.connectionId;
-        });
+        usersConnected = usersConnected.filter(connection => {});
         console.log(usersConnected);
 
         // handlePublisher(publisher);
@@ -191,8 +188,10 @@
 
     const disconnectAll = () => {
       usersConnected.map(connection => {
-        console.log('disconnecting ' + connection);
+        console.log('disconnecting ' + connection.id);
+        // if (connection != session.connection.id) {
         session.forceDisconnect(connection);
+        // }
       });
     };
 
