@@ -22,7 +22,7 @@ const isHostPresent = () => {
 // initializeSession();
 async function listVideoInputs() {
   try {
-    const devices = await listInputs();
+    const devices = await listDevices();
     const filteredDevices = devices.filter(
       device => device.kind === 'videoInput'
     );
@@ -32,33 +32,37 @@ async function listVideoInputs() {
   }
 }
 
-function refreshDeviceList() {
+function refreshDeviceList(pub) {
   console.log('refreshDeviceList');
   listVideoInputs().then(devices => {
     const videoSelect = document.getElementById('videoInputs');
     videoSelect.innerHTML = '';
+    const currentVideoSource = pub.getVideoSource();
 
     // Select Input
-    const disabledOption = document.createElement('option');
+    const currentVideoOption = document.createElement('option');
     //disabledOption.disabled = true;
-    disabledOption.innerText = 'Select Input';
-    // disabledOption.value = 'select';
-    // disabledOption.selected = true;
-    videoSelect.appendChild(disabledOption);
+    currentVideoOption.innerText = currentVideoSource.track.label;
+    currentVideoOption.classList.add('dropdown-item');
+    currentVideoOption.value = currentVideoSource.label;
+    currentVideoOption.selected = true;
+    videoSelect.appendChild(currentVideoOption);
 
     for (let i = 0; i < devices.length; i += 1) {
-      const device = devices[i];
-      const deviceOption = document.createElement('option');
-      deviceOption.innerText = device.label || `Video Input ${i + 1}`;
-      deviceOption.value = `video-source-${i}`;
+      if (devices[i].deviceId != currentVideoSource.deviceId) {
+        const deviceOption = document.createElement('option');
+        deviceOption.classList.add('dropdown-item');
+        deviceOption.innerText = devices[i].label || `Video Input ${i + 1}`;
+        deviceOption.value = `video-source-${i}`;
 
-      videoSelect.appendChild(deviceOption);
+        videoSelect.appendChild(deviceOption);
+      }
     }
 
     if (devices.length === 0) {
       const deviceOption = document.createElement('option');
       deviceOption.innerText = 'Default Video Input';
-      deviceOption.value = `video-source-vg-default`;
+      deviceOption.value = `default-video`;
 
       videoSelect.appendChild(deviceOption);
     }
@@ -67,28 +71,32 @@ function refreshDeviceList() {
   listAudioInputs().then(devices => {
     const audioSelect = document.getElementById('audioInputs');
     audioSelect.innerHTML = '';
+    const currentAudioSource = pub.getAudioSource();
+    console.log(currentAudioSource);
+    console.log(devices);
 
     // Select Input
-    const disabledOption = document.createElement('option');
-    disabledOption.disabled = true;
-    disabledOption.innerText = 'Select Input';
-    disabledOption.value = 'select';
-    disabledOption.selected = true;
-    audioSelect.appendChild(disabledOption);
+    const currentAudioOption = document.createElement('option');
+    currentAudioOption.innerText = currentAudioSource.label;
+    currentAudioOption.value = 'select';
+    currentAudioOption.selected = true;
+    audioSelect.appendChild(currentAudioOption);
 
     for (let i = 0; i < devices.length; i += 1) {
-      const device = devices[i];
-      const deviceOption = document.createElement('option');
-      deviceOption.innerText = device.label || `Audio Input ${i + 1}`;
-      deviceOption.value = `audio-source-${i}`;
+      if (devices[i].label != currentAudioSource.label) {
+        console.log(devices[i].deviceId, currentAudioSource.id);
+        const deviceOption = document.createElement('option');
+        deviceOption.innerText = devices[i].label || `Audio Input ${i + 1}`;
+        deviceOption.value = `audio-source-${i}`;
 
-      audioSelect.appendChild(deviceOption);
+        audioSelect.appendChild(deviceOption);
+      }
     }
 
     if (devices.length === 0) {
       const deviceOption = document.createElement('option');
       deviceOption.innerText = 'Default Audio Input';
-      deviceOption.value = `audio-source-vg-default`;
+      deviceOption.value = `default-audio`;
 
       audioSelect.appendChild(deviceOption);
     }
@@ -97,7 +105,7 @@ function refreshDeviceList() {
 
 async function listAudioInputs() {
   try {
-    const devices = await listInputs();
+    const devices = await listDevices();
     const filteredDevices = devices.filter(
       device => device.kind === 'audioInput'
     );
@@ -107,38 +115,10 @@ async function listAudioInputs() {
   }
 }
 
-listAudioInputs().then(devices => {
-  const audioSelect = document.getElementById('audioInputs');
-  audioSelect.innerHTML = '';
-
-  // Select Input
-  const disabledOption = document.createElement('option');
-  disabledOption.disabled = true;
-  disabledOption.innerText = 'Select Input';
-  disabledOption.value = 'select';
-  disabledOption.selected = true;
-  audioSelect.appendChild(disabledOption);
-
-  for (let i = 0; i < devices.length; i += 1) {
-    const device = devices[i];
-    const deviceOption = document.createElement('option');
-    deviceOption.innerText = device.label || `Audio Input ${i + 1}`;
-    deviceOption.value = `audio-source-${i}`;
-
-    audioSelect.appendChild(deviceOption);
-  }
-
-  if (devices.length === 0) {
-    const deviceOption = document.createElement('option');
-    deviceOption.innerText = 'Default Audio Input';
-
-    audioSelect.appendChild(deviceOption);
-  }
-});
-
 async function getVideoInput(index) {
   try {
     const devices = await listVideoInputs();
+
     if (devices.length > index) {
       return Promise.resolve(devices[index]);
     }
@@ -149,11 +129,20 @@ async function getVideoInput(index) {
   }
 }
 
+async function getAudioInput(index) {
+  try {
+    const devices = await listAudioInputs();
+    if (devices.length > index) {
+      return Promise.resolve(devices[index]);
+    }
+    return Promise.resolve(null);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 async function onVideoSourceChanged(event, publisher) {
   const value = event.target.value.replace('video-source-', '');
-  if (value === 'vg-default') {
-    return;
-  }
 
   const index = parseInt(value, 10);
   videoDeviceIndex = index;
@@ -166,7 +155,21 @@ async function onVideoSourceChanged(event, publisher) {
   }
 }
 
-function listInputs() {
+async function onAudioSourceChanged(event, publisher) {
+  const value = event.target.value.replace('audio-source-', '');
+
+  const index = parseInt(value, 10);
+  audioDeviceIndex = index;
+
+  if (audioDeviceIndex > -1) {
+    const audioDevice = await getAudioInput(audioDeviceIndex);
+    if (audioDevice != null) {
+      publisher.setAudioSource(audioDevice.deviceId);
+    }
+  }
+}
+
+function listDevices() {
   return new Promise((resolve, reject) => {
     OT.getDevices((error, devices) => {
       if (error) {

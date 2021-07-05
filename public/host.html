@@ -5,15 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="app.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"
+  ></script>
     <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 
     <script src="index.js"></script>
+    <script src="./opentok-network-test.js""></script>
     <title>Host view</title>
   </head>
   <body>
     <h1>This is the host view</h1>
     <div id="preview">
-      <div id="audioVideoSettings">
+      <!-- <div id="audioVideoSettings">
         <select
           id="audioInputs"
           class="form-select"
@@ -29,34 +41,61 @@
         >
           <option selected>Change video source</option>
         </select>
-      </div>
+      </div> -->
     </div>
 
     <div id="controls">
-      <!-- <div class="iconButton" id="cameraButton"> -->
-      <button class="iconButton" id="cameraButton">
-        <img
-          src="./icons/camera-video-fill.svg"
-          id="cameraIcon"
-          alt=""
-          width="100%"
-        />
-      </button>
-
-      <button class="iconButton" id="micButton">
-        <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
-      </button>
-
-      <div><progress id="progress" max="100" value="0"> </progress></div>
-
-      <button class="iconButton" id="endCallButton">
-        <img
-          src="./icons/telephone-x-fill.svg"
-          id="endCallIcon"
-          alt=""
-          width="100%"
-        />
-      </button>
+        <div class="dropdown">
+            <button class="iconButton" id="cameraButton">
+              <img
+                src="./icons/camera-video-fill.svg"
+                id="cameraIcon"
+                alt=""
+                width="100%"
+              />
+            </button>
+              <select
+                class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdwon"
+                  aria-expanded="false"
+                  id="videoInputs"
+                  aria-labelledby="dropdownMenuVideo"
+                  
+                >
+                <option class="dropdown-item" selected>Chango video source</option>
+    
+              </select>
+          </div>
+    
+    
+            <div class="dropdown">
+              <button class="iconButton" id="micButton">
+                <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
+              </button>
+              
+              <select
+                class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  id="audioInputs"
+                  aria-labelledby="dropdownAudio"
+                >
+                <option class="dropdown-item" selected>Chango Audio source</option>
+              </select>
+            </div>
+    
+            <div><progress id="progress" max="100" value="0"> 0% </progress></div>
+            <button class="iconButton" id="endCallButton">
+                <img
+                  src="./icons/telephone-x-fill.svg"
+                  id="endCallIcon"
+                  alt=""
+                  width="100%"
+                />
+              </button>
+          </div>
     </div>
 
     <div id="publisher"></div>
@@ -115,7 +154,9 @@
         connectionCount -= 1;
         console.log('[connectionDestroyed]', connectionCount);
         console.log(event.connection);
-        usersConnected = usersConnected.filter(connection => {});
+        usersConnected = usersConnected.filter(connection => {
+          return connection.id != event.connection.id;
+        });
         console.log(usersConnected);
 
         // handlePublisher(publisher);
@@ -155,14 +196,14 @@
       });
       publisher.on('streamDestroyed', event => {
         console.log('[Publisher] - streamDestroyed', event.reason);
-        event.preventDefault();
+        // event.preventDefault();
         isPublishing = false;
       });
       publisher.on('audioLevelUpdated', event => {
-        calculateAudioLevel(event.audioLevel);
+         calculateAudioLevel(event.audioLevel);
       });
       publisher.on('accessAllowed', () => {
-        refreshDeviceList();
+        refreshDeviceList(publisher);
       });
 
       // Connect to the session
@@ -181,15 +222,17 @@
       if (!isPublishing) {
         // todo publish twice the same stream explode everything
         session.publish(pub, handleError);
-      } else if (connectionCount === 1 && pub) {
+      } else if (connectionCount > 1 && pub) {
         session.unpublish(pub);
       }
     }
 
     const disconnectAll = () => {
+      handlePublisher(publisher);
       usersConnected.map(connection => {
         console.log('disconnecting ' + connection.id);
         // if (connection != session.connection.id) {
+
         session.forceDisconnect(connection);
         // }
       });
@@ -226,7 +269,7 @@
         document.getElementById('cameraIcon').src =
           './icons/camera-video-fill.svg';
       }
-      WaitingRoompublisher.publishVideo(hasVideo);
+      publisher.publishVideo(hasVideo);
     };
 
     const toggleAudio = () => {
@@ -237,7 +280,7 @@
         document.getElementById('micIcon').src = './icons/mic-fill.svg';
       }
 
-      WaitingRoompublisher.publishAudio(hasAudio);
+      publisher.publishAudio(hasAudio);
     };
 
     cameraButton.addEventListener('click', () => {
@@ -259,9 +302,7 @@
 
     document.getElementById('audioInputs').addEventListener('change', e => {
       e.preventDefault();
-      const value = event.target.value.replace('audio-source-', '');
-      const index = parseInt(value, 10);
-      audioDeviceIndex = index;
+      onAudioSourceChanged(e, waitingRoompublisher)
     });
   </script>
 </html>

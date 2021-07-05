@@ -4,10 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="app.css" />
     <title>Participant View</title>
     <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
     <script src="index.js"></script>
+    <script src="./opentok-network-test.js""></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -17,11 +24,15 @@
   <body>
     <div id="WaitingRoomContainer">
       <div id="banner">
-        <h1>You're on the waiting Room. Please wait for the host to join</h1>
+          <!-- <h1><span class="badge bg-secondary">You're on the waiting Room. Please wait for the host to join</span></h1> -->
+          <div class="alert alert-dark" role="alert">
+              A simple dark alert—check it out!
+            </div>
       </div>
 
       <div id="controls">
         <!-- <div class="iconButton" id="cameraButton"> -->
+      <div class="dropdown">
         <button class="iconButton" id="cameraButton">
           <img
             src="./icons/camera-video-fill.svg"
@@ -30,34 +41,78 @@
             width="100%"
           />
         </button>
+          <select
+            class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdwon"
+              aria-expanded="false"
+              id="videoInputs"
+              aria-labelledby="dropdownMenuVideo"
+              
+            >
+            <option class="dropdown-item" selected>Chango video source</option>
 
-        <button class="iconButton" id="micButton">
+          </select>
+      </div>
+
+        <!-- <button class="iconButton" id="micButton">
           <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
-        </button>
+        </button> -->
+
+        <div class="dropdown">
+          <button class="iconButton" id="micButton">
+            <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
+          </button>
+          
+          <select
+            class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              id="audioInputs"
+              aria-labelledby="dropdownAudio"
+            >
+            <option class="dropdown-item" selected>Chango Audio source</option>
+          </select>
+        </div>
 
         <div><progress id="progress" max="100" value="0"> 0% </progress></div>
       </div>
     </div>
     <div id="publisher">
-      <div id="preview">
-        <div id="audioVideoSettings">
-          <select
+      <!-- <div id="preview">
+        <div id="audioVideoSettings"> -->
+          <!-- <select
             id="audioInputs"
             class="form-select"
             aria-label="Default select example"
           >
             <option selected>Chango Audio source</option>
-          </select>
+          </select> -->
 
-          <select
+          <!-- <select
             class="form-select"
             id="videoInputs"
             aria-label="Default select example"
           >
             <option selected>Change video source</option>
-          </select>
-        </div>
-      </div>
+          </select> -->
+          <!-- <figure>
+            <figcaption>Listen to the T-Rex:</figcaption>
+            <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
+              Your browser does not support the
+              <code>audio</code> element.
+            </audio>
+          </figure> -->
+        <!-- </div>
+        <figure>
+          <figcaption>Listen to the T-Rex:</figcaption>
+          <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
+            Your browser does not support the
+            <code>audio</code> element.
+          </audio>
+        </figure>
+      </div> -->
     </div>
 
     <div id="subscriber"></div>
@@ -155,7 +210,7 @@
       waitingRoompublisher.on({
         accessAllowed: event => {
           console.log('accessAllowed');
-          refreshDeviceList();
+          refreshDeviceList(waitingRoompublisher);
         },
         accessDenied: () => {
           alert('Please grant devices access');
@@ -183,20 +238,10 @@
       });
     }
 
-    // function handlePublisher(pub) {
-    //   console.log('[handlePublish]', pub);
-    //   if (!isPublishing) {
-    //     // todo publish twice the same stream explode everything
-    //     session.publish(pub, handleError);
-    //   } else if (isPublishing && pub) {
-    //     session.unpublish(pub);
-    //   }
-    // }
 
     function handlePublisher(pub) {
       console.log('[handlePublish]', pub);
       if (!isPublishing && connectionCount > 1) {
-        // todo publish twice the same stream explode everything
         session.publish(pub, handleError);
       } else if (connectionCount === 1 && pub) {
         session.unpublish(pub);
@@ -262,9 +307,8 @@
 
     document.getElementById('audioInputs').addEventListener('change', e => {
       e.preventDefault();
-      const value = event.target.value.replace('audio-source-', '');
-      const index = parseInt(value, 10);
-      audioDeviceIndex = index;
+
+      onAudioSourceChanged(e, waitingRoompublisher)
     });
   </script>
 </html>
