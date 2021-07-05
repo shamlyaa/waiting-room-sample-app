@@ -2,7 +2,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get('room');
 
 let connectionCount = 0;
-// let isPublishing = false;
 let usersConnected = [];
 
 function handleError(error) {
@@ -18,8 +17,6 @@ const isHostPresent = () => {
     return false;
   }
 };
-
-// initializeSession();
 
 function refreshDeviceList(pub) {
   console.log('refreshDeviceList');
@@ -73,7 +70,6 @@ function refreshDeviceList(pub) {
 
     for (let i = 0; i < devices.length; i += 1) {
       if (devices[i].label != currentAudioSource.label) {
-        console.log(devices[i].deviceId, currentAudioSource.id);
         const deviceOption = document.createElement('option');
         deviceOption.innerText = devices[i].label || `Audio Input ${i + 1}`;
         deviceOption.value = `audio-source-${i}`;
@@ -182,14 +178,31 @@ const listDevices = () => {
   });
 };
 
-async function waitForTestEnd(pub) {
-  await sleep(3000);
-  precallTestDone ? handlePublisher(pub) : waitForTestEnd(pub);
-}
+// async function waitForTestToPublish(pub) {
+//   const publisher = pub;
+//   // if (precallTestDone) {
+//   //   handlePublisher(pub);
+//   // } else {
+//   await sleep(3000);
+//   if (precallTestDone) {
+//     handlePublisher(publisher);
+//   } else {
+//     waitForTestToPublish(publisher);
+//   }
+// }
 
-const sleep = ms => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
+// async function waitForTestToSubscribe(stream) {
+//   if (precallTestDone) {
+//     handleSubscriber(stream);
+//   } else {
+//     await sleep(3000);
+//     waitForTestToSubscribe(stream);
+//   }
+// }
+
+// const sleep = ms => {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// };
 
 const startTest = () => {
   return new Promise((resolve, reject) => {
