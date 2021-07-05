@@ -20,17 +20,6 @@ const isHostPresent = () => {
 };
 
 // initializeSession();
-async function listVideoInputs() {
-  try {
-    const devices = await listDevices();
-    const filteredDevices = devices.filter(
-      device => device.kind === 'videoInput'
-    );
-    return Promise.resolve(filteredDevices);
-  } catch (error) {
-    return Promise.reject(error);
-  }
-}
 
 function refreshDeviceList(pub) {
   console.log('refreshDeviceList');
@@ -103,45 +92,7 @@ function refreshDeviceList(pub) {
   });
 }
 
-async function listAudioInputs() {
-  try {
-    const devices = await listDevices();
-    const filteredDevices = devices.filter(
-      device => device.kind === 'audioInput'
-    );
-    return Promise.resolve(filteredDevices);
-  } catch (error) {
-    return Promise.reject(error);
-  }
-}
-
-async function getVideoInput(index) {
-  try {
-    const devices = await listVideoInputs();
-
-    if (devices.length > index) {
-      return Promise.resolve(devices[index]);
-    }
-
-    return Promise.resolve(null);
-  } catch (error) {
-    return Promise.reject(error);
-  }
-}
-
-async function getAudioInput(index) {
-  try {
-    const devices = await listAudioInputs();
-    if (devices.length > index) {
-      return Promise.resolve(devices[index]);
-    }
-    return Promise.resolve(null);
-  } catch (error) {
-    return Promise.reject(error);
-  }
-}
-
-async function onVideoSourceChanged(event, publisher) {
+const onVideoSourceChanged = async (event, publisher) => {
   const value = event.target.value.replace('video-source-', '');
 
   const index = parseInt(value, 10);
@@ -153,9 +104,9 @@ async function onVideoSourceChanged(event, publisher) {
       publisher.setVideoSource(videoDevice.deviceId);
     }
   }
-}
+};
 
-async function onAudioSourceChanged(event, publisher) {
+const onAudioSourceChanged = async (event, publisher) => {
   const value = event.target.value.replace('audio-source-', '');
 
   const index = parseInt(value, 10);
@@ -167,9 +118,59 @@ async function onAudioSourceChanged(event, publisher) {
       publisher.setAudioSource(audioDevice.deviceId);
     }
   }
-}
+};
 
-function listDevices() {
+const getVideoInput = async index => {
+  try {
+    const devices = await listVideoInputs();
+
+    if (devices.length > index) {
+      return Promise.resolve(devices[index]);
+    }
+
+    return Promise.resolve(null);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const getAudioInput = async index => {
+  try {
+    const devices = await listAudioInputs();
+    if (devices.length > index) {
+      return Promise.resolve(devices[index]);
+    }
+    return Promise.resolve(null);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const listAudioInputs = async () => {
+  try {
+    const devices = await listDevices();
+    const filteredDevices = devices.filter(
+      device => device.kind === 'audioInput'
+    );
+    return Promise.resolve(filteredDevices);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const listVideoInputs = async () => {
+  try {
+    const devices = await listDevices();
+    const filteredDevices = devices.filter(
+      device => device.kind === 'videoInput'
+    );
+    return Promise.resolve(filteredDevices);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const listDevices = () => {
   return new Promise((resolve, reject) => {
     OT.getDevices((error, devices) => {
       if (error) {
@@ -179,4 +180,4 @@ function listDevices() {
       }
     });
   });
-}
+};
