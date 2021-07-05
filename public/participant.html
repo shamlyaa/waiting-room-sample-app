@@ -79,27 +79,30 @@
         <div><progress id="audioMeter" max="100" value="0"> 0% </progress></div>
       </div>
     </div>
-    <div id="publisher">
-        <progress id="progress" max="100" value="0"> 0% </progress>
-          <!-- <figure>
-            <figcaption>Listen to the T-Rex:</figcaption>
-            <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
-              Your browser does not support the
-              <code>audio</code> element.
-            </audio>
-          </figure> -->
-        <!-- </div>
-        <figure>
-          <figcaption>Listen to the T-Rex:</figcaption>
-          <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
-            Your browser does not support the
-            <code>audio</code> element.
-          </audio>
-        </figure>
-      </div> -->
+    <div>
+        <div id="publisher">
+            <progress id="progress" max="100" value="0"> 0% </progress>
+              <!-- <figure>
+                <figcaption>Listen to the T-Rex:</figcaption>
+                <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
+                  Your browser does not support the
+                  <code>audio</code> element.
+                </audio>
+              </figure> -->
+            <!-- </div>
+            <figure>
+              <figcaption>Listen to the T-Rex:</figcaption>
+              <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
+                Your browser does not support the
+                <code>audio</code> element.
+              </audio>
+            </figure>
+          </div> -->
+        </div>
+    
+        <div id="subscriber"></div>
     </div>
-
-    <div id="subscriber"></div>
+   
   </body>
   <script>
     const basicUrl = 'http://localhost:3000';
@@ -115,7 +118,7 @@
     let hasVideo = true;
     let hasAudio = true;
     let isPublishing = false;
-    // let usersConnected = [];
+    let precallTestDone = false
 
     async function getCredentials() {
       // Default
@@ -153,12 +156,16 @@
         console.log(usersConnected);
 
         if (isHostPresent() || event.connection.data === 'admin') {
+          if(precallTestDone){
           handlePublisher(waitingRoompublisher);
+          }
+          else{
+             waitForTestEnd(waitingRoompublisher)
+          }
         }
       });
 
       session.on('connectionDestroyed', event => {
-        console.log('destroyyy');
         connectionCount -= 1;
         console.log('[connectionDestroyed]', connectionCount);
         usersConnected = usersConnected.filter(connection => {
@@ -172,8 +179,8 @@
         // console.log('event');
         const subscriberOptions = {
           insertMode: 'append',
-          width: '60%',
-          height: '60%'
+          width: '100%',
+          height: '100%'
         };
         session.subscribe(
           event.stream,
@@ -297,26 +304,28 @@
 
     (async()=>{
 
-const progressIndicator = setInterval(()=>{
-  let currentProgress = document.getElementById("progress").value
-  document.getElementById("progress").value += 5
-  if(currentProgress === 100){
-    clearInterval(progressIndicator)
-    // document.getElementById("progress").value = 0
-  }
-}, 1000)
-try{
-  const result = await startTest()
-  console.log(result);
-  const classResult = result.text === `You're all set!` ? 'alert-success' : 'alert-warning'
-  const precallResult = `
-  <div class="alert ${classResult} alert-dismissible fade show" role="alert">
-  ${result.text}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>`
-  document.getElementById("publisher").insertAdjacentHTML("beforeend" ,precallResult )
-}
-catch(e) {console.log(e)}
+    const progressIndicator = setInterval(()=>{
+      let currentProgress = document.getElementById("progress").value
+      document.getElementById("progress").value += 5
+      if(currentProgress === 100){
+        clearInterval(progressIndicator)
+        // document.getElementById("progress").value = 0
+      }
+    }, 1000)
+
+    try{
+      const result = await startTest()
+      precallTestDone = true
+      const classResult = result.text === `You're all set!` ? 'alert-success' : 'alert-warning'
+      const precallResult = `
+      <div class="alert ${classResult} alert-dismissible fade show" role="alert">
+      ${result.text}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`
+      document.getElementById("publisher").insertAdjacentHTML("beforeend" ,precallResult )
+      document.getElementById("progress").style.display = 'none'
+    }
+    catch(e) {console.log(e)}
 
 })()
   </script>

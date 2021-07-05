@@ -182,6 +182,15 @@ const listDevices = () => {
   });
 };
 
+async function waitForTestEnd(pub) {
+  await sleep(3000);
+  precallTestDone ? handlePublisher(pub) : waitForTestEnd(pub);
+}
+
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 const startTest = () => {
   return new Promise((resolve, reject) => {
     otNetworkTest = new OTNetworkTest({

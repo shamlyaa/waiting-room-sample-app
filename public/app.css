@@ -20,7 +20,7 @@ div {
 /* .dropdown {
   width: 20%;
 } */
-#subscriber {
+/* #subscriber {
   position: absolute;
   left: 0;
   top: 0;
@@ -28,6 +28,14 @@ div {
 
   z-index: 10;
   height: calc(100vh - 90px);
+} */
+#subscriber {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(100vh - 90px);
+  z-index: 10;
 }
 #publisher {
   position: absolute;

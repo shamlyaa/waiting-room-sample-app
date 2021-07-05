@@ -145,8 +145,8 @@
 
         cleanup() {
           subscriber && session.unsubscribe(subscriber);
-          // publisher && session.unpublish(publisher);
-          // session.disconnect();
+          publisher && session.unpublish(publisher);
+          session.disconnect();
         },
 
         onSubscribe: function onSubscribe(error, subscriber) {

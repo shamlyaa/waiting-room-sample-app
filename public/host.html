@@ -26,10 +26,11 @@
     <h1>This is the host view</h1>
     <div id="preview">
     </div>
-    <div id="publisher">
-      <progress id="progress" max="100" value="0"> 0% </progress>
+    <div>
+        <div id="publisher"></div>
+          <div id="subscriber"></div>
     </div>
-    <div id="subscribers"></div>
+   
 
     <div id="controls">
         <div class="dropdown">
@@ -151,12 +152,13 @@
       session.on('streamCreated', function streamCreated(event) {
         const subscriberOptions = {
           insertMode: 'append',
-          width: '60%',
-          height: '60%'
+          width: '100%',
+          height: '100%',
+          // fitMode: "cover"
         };
         session.subscribe(
           event.stream,
-          'subscribers',
+          'subscriber',
           subscriberOptions,
           handleError
         );
