@@ -4,29 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="app.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="app.css" />
-    <title>Participant View</title>
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"
+  ></script>
     <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
     <script src="index.js"></script>
     <script src="./opentok-network-test.js""></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
+    <title>Participant View</title>
   </head>
   <body>
     <div id="WaitingRoomContainer">
       <div id="banner">
           <!-- <h1><span class="badge bg-secondary">You're on the waiting Room. Please wait for the host to join</span></h1> -->
           <div class="alert alert-dark" role="alert">
-              A simple dark alert—check it out!
+              Waiting for the host to connect. Please make sure that your microphone and camera works
             </div>
       </div>
 
@@ -76,27 +76,11 @@
           </select>
         </div>
 
-        <div><progress id="progress" max="100" value="0"> 0% </progress></div>
+        <div><progress id="audioMeter" max="100" value="0"> 0% </progress></div>
       </div>
     </div>
     <div id="publisher">
-      <!-- <div id="preview">
-        <div id="audioVideoSettings"> -->
-          <!-- <select
-            id="audioInputs"
-            class="form-select"
-            aria-label="Default select example"
-          >
-            <option selected>Chango Audio source</option>
-          </select> -->
-
-          <!-- <select
-            class="form-select"
-            id="videoInputs"
-            aria-label="Default select example"
-          >
-            <option selected>Change video source</option>
-          </select> -->
+        <progress id="progress" max="100" value="0"> 0% </progress>
           <!-- <figure>
             <figcaption>Listen to the T-Rex:</figcaption>
             <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
@@ -263,7 +247,7 @@
     };
 
     const setLogLevel = logLevel => {
-      document.getElementById('progress').value = logLevel;
+      document.getElementById('audioMeter').value = logLevel;
     };
 
     const toggleVideo = () => {
@@ -310,5 +294,30 @@
 
       onAudioSourceChanged(e, waitingRoompublisher)
     });
+
+    (async()=>{
+
+const progressIndicator = setInterval(()=>{
+  let currentProgress = document.getElementById("progress").value
+  document.getElementById("progress").value += 5
+  if(currentProgress === 100){
+    clearInterval(progressIndicator)
+    // document.getElementById("progress").value = 0
+  }
+}, 1000)
+try{
+  const result = await startTest()
+  console.log(result);
+  const classResult = result.text === `You're all set!` ? 'alert-success' : 'alert-warning'
+  const precallResult = `
+  <div class="alert ${classResult} alert-dismissible fade show" role="alert">
+  ${result.text}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>`
+  document.getElementById("publisher").insertAdjacentHTML("beforeend" ,precallResult )
+}
+catch(e) {console.log(e)}
+
+})()
   </script>
 </html>

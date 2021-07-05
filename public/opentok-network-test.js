@@ -2,7 +2,7 @@
 
 !(global => {
   function OTNetworkTest(options) {
-    const TEST_TIMEOUT_MS = 15000; // 15 seconds
+    const TEST_TIMEOUT_MS = 20000; // 15 seconds
 
     const subscriberEl = document.createElement('div');
     const publisherEl = document.createElement('div');
@@ -145,8 +145,8 @@
 
         cleanup() {
           subscriber && session.unsubscribe(subscriber);
-          publisher && session.unpublish(publisher);
-          session.disconnect();
+          // publisher && session.unpublish(publisher);
+          // session.disconnect();
         },
 
         onSubscribe: function onSubscribe(error, subscriber) {

@@ -181,3 +181,23 @@ const listDevices = () => {
     });
   });
 };
+
+const startTest = () => {
+  return new Promise((resolve, reject) => {
+    otNetworkTest = new OTNetworkTest({
+      apiKey: '46264952',
+      resolution: '640x480',
+      sessionId:
+        '2_MX40NjI2NDk1Mn5-MTYyNTQ4NjU2OTYxOX5jVFQvWUFZeGQvVGFITkR2V0xzeVlOejF-fg',
+      token:
+        'T1==cGFydG5lcl9pZD00NjI2NDk1MiZzaWc9ODFkNTQ5NTEwM2MxNWY3YWQyNGNlOWE4ZDA0MzBhYjFhNDFmZDZjMTpzZXNzaW9uX2lkPTJfTVg0ME5qSTJORGsxTW41LU1UWXlOVFE0TmpVMk9UWXhPWDVqVkZRdldVRlplR1F2VkdGSVRrUjJWMHh6ZVZsT2VqRi1mZyZjcmVhdGVfdGltZT0xNjI1NDg3MjM1Jm5vbmNlPTAuNDQwMTI5NzA0Nzk2MzUxNSZyb2xlPW1vZGVyYXRvciZleHBpcmVfdGltZT0xNjI1NTczNjM1JmNvbm5lY3Rpb25fZGF0YT1hZG1pbiZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ=='
+    });
+    otNetworkTest.startNetworkTest((error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
