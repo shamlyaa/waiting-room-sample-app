@@ -1,10 +1,13 @@
 import {
   refreshDeviceList,
-  usersConnected,
-  connectionCount,
+  // usersConnected,
+  // connectionCount,
   onVideoSourceChanged,
   onAudioSourceChanged
 } from './utils';
+
+import variables from './variables';
+let { usersConnected, connectionCount } = variables;
 
 export class Host {
   constructor(roomName) {
@@ -93,7 +96,7 @@ export class Host {
     });
 
     // Subscribe to a newly created stream
-    this.session.on('streamCreated', function streamCreated(event) {
+    this.session.on('streamCreated', event => {
       const subscriberOptions = {
         insertMode: 'append',
         width: '100%',

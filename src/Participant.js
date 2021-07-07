@@ -1,11 +1,14 @@
 import {
-  isHostPresent,
+  // isHostPresent,
   refreshDeviceList,
-  usersConnected,
-  connectionCount,
+  // usersConnected,
+  // connectionCount,
   onVideoSourceChanged,
   onAudioSourceChanged
 } from './utils';
+// import { usersConnected, connectionCount } from './variables';
+import variables from './variables';
+let { usersConnected, connectionCount } = variables;
 import { startTest } from './network-test';
 
 // import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
@@ -20,6 +23,7 @@ export class Participant {
     this.precallTestDone = false;
     this.hasVideo = true;
     this.hasAudio = true;
+    this.isPublishing = false;
   }
   init() {
     this.getCredentials().then(data => {
@@ -28,9 +32,19 @@ export class Participant {
       startTest().then(results => {
         console.log(results);
         this.precallTestDone = true;
+        console.log(usersConnected);
+        if (this.isHostPresent()) this.handlePublisher();
       });
       this.registerEvents();
     });
+  }
+
+  isHostPresent() {
+    if (usersConnected.find(e => e.data === 'admin')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   registerEvents() {
@@ -101,7 +115,7 @@ export class Participant {
       usersConnected.push(event.connection);
       console.log(usersConnected);
 
-      if (isHostPresent() || event.connection.data === 'admin') {
+      if (this.isHostPresent() || event.connection.data === 'admin') {
         if (this.precallTestDone) {
           this.handlePublisher();
         }
@@ -152,10 +166,10 @@ export class Participant {
       },
       streamCreated: e => {
         console.log('the participant started streaming');
-        isPublishing = true;
+        this.isPublishing = true;
       },
       streamDestroyed: e => {
-        isPublishing = false;
+        this.isPublishing = false;
       }
     });
 
@@ -171,8 +185,19 @@ export class Participant {
 
   handlePublisher() {
     console.log('[handlePublish]');
-    if (!isPublishing && connectionCount > 1) {
-      this.session.publish(waitingRoompublisher, this.handleError);
+    // this.session.connect(token, error => {
+    //   if (error) {
+    //     handleError(error);
+    //   } else {
+    //     console.log('Session Connected');
+    //     // if (!isPublishing && connectionCount > 1) {
+    //     //   this.session.publish(waitingRoompublisher, this.handleError);
+    //     // }
+    //   }
+    // });
+
+    if (!this.isPublishing && connectionCount > 1) {
+      this.session.publish(this.waitingRoompublisher, this.handleError);
     }
   }
 
@@ -234,6 +259,7 @@ export class Participant {
     try {
       const result = await this.startTest();
       this.precallTestDone = true;
+      console.log('host ' + t);
       if (this.isHostPresent()) this.handlePublisher();
       return result;
     } catch (e) {
