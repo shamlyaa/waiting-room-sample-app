@@ -12,49 +12,49 @@
       crossorigin="anonymous"
     />
     <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"
-  ></script>
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
-    <script src="index.js"></script>
+    <script async src="/dist/main.js"></script>
+    <!-- <script src="index.js"></script>
     <script src="participant.js"></script>
-    <script src="./opentok-network-test.js""></script>
+    <script src="./opentok-network-test.js""></script> -->
     <title>Participant View</title>
   </head>
   <body>
     <div id="WaitingRoomContainer">
       <div id="banner">
-          <!-- <h1><span class="badge bg-secondary">You're on the waiting Room. Please wait for the host to join</span></h1> -->
-          <div class="alert alert-dark" role="alert">
-              Waiting for the host to connect. Please make sure that your microphone and camera works
-            </div>
+        <!-- <h1><span class="badge bg-secondary">You're on the waiting Room. Please wait for the host to join</span></h1> -->
+        <div class="alert alert-dark" role="alert">
+          Waiting for the host to connect. Please make sure that your microphone
+          and camera works
+        </div>
       </div>
 
       <div id="controls">
         <!-- <div class="iconButton" id="cameraButton"> -->
-      <div class="dropdown">
-        <button class="iconButton" id="cameraButton">
-          <img
-            src="./icons/camera-video-fill.svg"
-            id="cameraIcon"
-            alt=""
-            width="100%"
-          />
-        </button>
+        <div class="dropdown">
+          <button class="iconButton" id="cameraButton">
+            <img
+              src="./icons/camera-video-fill.svg"
+              id="cameraIcon"
+              alt=""
+              width="100%"
+            />
+          </button>
           <select
             class="btn btn-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdwon"
-              aria-expanded="false"
-              id="videoInputs"
-              aria-labelledby="dropdownMenuVideo"
-              
-            >
+            type="button"
+            data-bs-toggle="dropdwon"
+            aria-expanded="false"
+            id="videoInputs"
+            aria-labelledby="dropdownMenuVideo"
+          >
             <option class="dropdown-item" selected>Chango video source</option>
-
           </select>
-      </div>
+        </div>
 
         <!-- <button class="iconButton" id="micButton">
           <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
@@ -64,15 +64,15 @@
           <button class="iconButton" id="micButton">
             <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
           </button>
-          
+
           <select
             class="btn btn-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              id="audioInputs"
-              aria-labelledby="dropdownAudio"
-            >
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            id="audioInputs"
+            aria-labelledby="dropdownAudio"
+          >
             <option class="dropdown-item" selected>Chango Audio source</option>
           </select>
         </div>
@@ -81,16 +81,16 @@
       </div>
     </div>
     <div>
-        <div id="publisher">
-            <progress id="progress" max="100" value="0"> 0% </progress>
-              <!-- <figure>
+      <div id="publisher">
+        <progress id="progress" max="100" value="0"> 0% </progress>
+        <!-- <figure>
                 <figcaption>Listen to the T-Rex:</figcaption>
                 <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
                   Your browser does not support the
                   <code>audio</code> element.
                 </audio>
               </figure> -->
-            <!-- </div>
+        <!-- </div>
             <figure>
               <figcaption>Listen to the T-Rex:</figcaption>
               <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
@@ -99,13 +99,9 @@
               </audio>
             </figure>
           </div> -->
-        </div>
-    
-        <div id="subscriber"></div>
-    </div>
-   
-  </body>
-  <!-- <script>
+      </div>
 
-  </script> -->
+      <div id="subscriber"></div>
+    </div>
+  </body>
 </html>

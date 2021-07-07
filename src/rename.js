@@ -1,8 +1,8 @@
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get('room');
 
-let connectionCount = 0;
-let usersConnected = [];
+// let connectionCount = 0;
+// let usersConnected = [];
 
 function handleError(error) {
   if (error) {

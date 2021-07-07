@@ -16,16 +16,18 @@ if (!apiKey || !apiSecret) {
 
 const opentok = new OpenTok(apiKey, apiSecret);
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/src'));
 
-const participantPath = path.join(__dirname, './public/participant.html');
+const participantPath = path.join(__dirname, './participant.html');
 app.use('/participant', express.static(participantPath));
 
-const hostPath = path.join(__dirname, './public/host.html');
+const hostPath = path.join(__dirname, './host.html');
+app.use('/dist', express.static('dist'));
+
 app.use('/host', express.static(hostPath));
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+app.get('/host', (req, res) => {
+  res.sendFile(__dirname + '/host.html');
 });
 
 app.get('/favicon.ico', (req, res) => res.status(204));
