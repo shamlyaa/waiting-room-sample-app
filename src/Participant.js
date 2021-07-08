@@ -1,12 +1,8 @@
 import {
-  // isHostPresent,
   refreshDeviceList,
-  // usersConnected,
-  // connectionCount,
   onVideoSourceChanged,
   onAudioSourceChanged
 } from './utils';
-// import { usersConnected, connectionCount } from './variables';
 import variables from './variables';
 let { usersConnected, connectionCount } = variables;
 import { startTest } from './network-test';
@@ -15,7 +11,6 @@ import { getCredentials } from './credentials';
 export class Participant {
   constructor(roomName) {
     this.roomName = roomName;
-    this.basicUrl = 'http://localhost:3000';
     this.roomName = roomName;
     this.session = null;
     this.waitingRoompublisher = null;
@@ -256,45 +251,3 @@ export class Participant {
   //   }, 1000);
   // }
 }
-
-// const basicUrl = 'http://localhost:3000';
-// const cameraButton = document.getElementById('cameraButton');
-// const micButton = document.getElementById('micButton');
-// const publisherOptions = {
-//   insertMode: 'append',
-//   width: '100%',
-//   height: '100%'
-// };
-// let session = null;
-// let waitingRoompublisher = null;
-// let hasVideo = true;
-// let hasAudio = true;
-// let isPublishing = false;
-// let precallTestDone = false;
-
-// cameraButton.addEventListener('click', () => {
-//   toggleVideo();
-// });
-
-// document.getElementById('videoInputs').addEventListener('change', e => {
-//   onVideoSourceChanged(e, waitingRoompublisher);
-// });
-// navigator.mediaDevices.ondevicechange = () => {
-//   console.log('Media Devices change detected, refreshing list');
-//   refreshDeviceList();
-// };
-
-// micButton.addEventListener('click', () => {
-//   toggleAudio();
-// });
-
-// document.getElementById('audioInputs').addEventListener('change', e => {
-//   e.preventDefault();
-
-//   onAudioSourceChanged(e, waitingRoompublisher);
-// });
-
-// handleTestProgressIndicator();
-// handleTest().then(result => {
-//   addTestResults(result);
-// });

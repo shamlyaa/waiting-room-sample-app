@@ -1,17 +1,27 @@
 import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
+import { handleTestProgressIndicator } from './test-progress';
+import { addTestResults } from './test-results';
 
 export const startTest = ({ apiKey, sessionId, token }) => {
-  const otNetworkTest = new NetworkTest(OT, {
-    apiKey: apiKey, // Add the API key for your OpenTok project here.
-    sessionId: sessionId, // Add a test session ID for that project
-    token: token
-  });
+  const otNetworkTest = new NetworkTest(
+    OT,
+    {
+      apiKey: apiKey, // Add the API key for your OpenTok project here.
+      sessionId: sessionId, // Add a test session ID for that project
+      token: token
+    },
+    {
+      timeout: 30
+    }
+  );
 
   return new Promise((resolve, reject) => {
     otNetworkTest
       .testConnectivity()
       .then(results => {
+        addTestResults(results);
         console.log('OpenTok connectivity test results', results);
+        handleTestProgressIndicator();
         otNetworkTest
           .testQuality(function updateCallback(stats) {
             console.log('intermediate testQuality stats', stats);
