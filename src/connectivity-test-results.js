@@ -19,14 +19,18 @@ export const addConnectivityTestResults = results => {
       .join('');
   };
 
+  const messageToShow = results.success
+    ? 'You can connect to our servers'
+    : 'You can not connect to our servers';
+
   const precallResult = `
-          <div class="alert ${classResult} alert-dismissible fade show" role="alert">
-          Connectivity successful : ${results.success}
+          <div class="alert ${classResult} alert-dismissible fade show alert-centered" role="alert">
+          <div>${messageToShow}</div>
           <div id="message"></div>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`;
   document
-    .getElementById('publisher')
+    .getElementById('banner')
     .insertAdjacentHTML('beforeend', precallResult);
   document.getElementById('message').innerHTML =
     '<ul>' +

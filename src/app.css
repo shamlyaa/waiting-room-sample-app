@@ -30,8 +30,10 @@ div {
   height: calc(100vh - 90px);
 } */
 
-.alert {
+.alert-centered {
   z-index: 100;
+  margin: auto;
+  width: 30%;
 }
 #subscriber {
   position: absolute;

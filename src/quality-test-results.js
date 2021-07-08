@@ -27,7 +27,7 @@ export const addQualityTestResults = results => {
   console.log(message);
 
   const precallResult = `
-          <div class="alert ${classResult} alert-dismissible fade show" role="alert">
+          <div class="alert ${classResult} alert-dismissible fade show alert-centered" role="alert">
           <div>Quality check : Done</div>
           <div>Audio Supported : ${results.audio.supported}</div>
           <div>Audio Kbps : ${Math.round(results.audio?.bitrate) / 1000}</div>

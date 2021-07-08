@@ -1,7 +1,7 @@
 export const handleTestProgressIndicator = () => {
   const progressIndicator = setInterval(() => {
     let currentProgress = document.getElementById('progress').value;
-    document.getElementById('progress').value += 5;
+    document.getElementById('progress').value += 2.5;
     if (currentProgress === 100) {
       clearInterval(progressIndicator);
       document.getElementById('progress').value = 0;
