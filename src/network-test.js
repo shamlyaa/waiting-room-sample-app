@@ -1,6 +1,7 @@
 import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
 import { handleTestProgressIndicator } from './test-progress';
-import { addTestResults } from './test-results';
+import { addConnectivityTestResults } from './connectivity-test-results';
+import { addQualityTestResults } from './quality-test-results';
 
 export const startTest = ({ apiKey, sessionId, token }) => {
   const otNetworkTest = new NetworkTest(
@@ -11,7 +12,7 @@ export const startTest = ({ apiKey, sessionId, token }) => {
       token: token
     },
     {
-      timeout: 30
+      timeout: 30000
     }
   );
 
@@ -19,8 +20,8 @@ export const startTest = ({ apiKey, sessionId, token }) => {
     otNetworkTest
       .testConnectivity()
       .then(results => {
-        addTestResults(results);
         console.log('OpenTok connectivity test results', results);
+        addConnectivityTestResults(results);
         handleTestProgressIndicator();
         otNetworkTest
           .testQuality(function updateCallback(stats) {
@@ -41,7 +42,6 @@ export const startTest = ({ apiKey, sessionId, token }) => {
             }
             if (!results.audio.supported) {
               console.log('Audio not supported:', results.audio.reason);
-              publisherSettings.audioSource = null;
               // video-only, but you probably don't want this -- notify the user?
             }
             if (
