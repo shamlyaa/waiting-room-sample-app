@@ -12,8 +12,6 @@ let { usersConnected, connectionCount } = variables;
 import { startTest } from './network-test';
 import { getCredentials } from './credentials';
 
-// import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
-
 export class Participant {
   constructor(roomName) {
     this.roomName = roomName;
@@ -31,9 +29,7 @@ export class Participant {
     getCredentials(this.roomName, 'participant')
       .then(data => {
         this.roomToken = data.token;
-        // this.getCredentials().then(data => {
         this.initializeSession(data);
-        // this.startTest();
         getCredentials(`${this.roomName}-precall`, 'participant').then(
           precallCreds => {
             startTest(precallCreds)
@@ -83,21 +79,7 @@ export class Participant {
     }
   }
 
-  async waitForTestToSubscribe(stream) {
-    if (this.precallTestDone) {
-      this.handleSubscriber(stream);
-    } else {
-      await this.sleep(3000);
-      this.waitForTestToSubscribe(stream);
-    }
-  }
-
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  initializeSession(data) {
-    const { apiKey, sessionId } = data;
+  initializeSession({ apiKey, sessionId }) {
     this.session = OT.initSession(apiKey, sessionId);
 
     this.session.on('connectionCreated', event => {
@@ -106,10 +88,13 @@ export class Participant {
       usersConnected.push(event.connection);
       console.log(usersConnected);
 
-      if (this.isHostPresent() || event.connection.data === 'admin') {
-        if (this.precallTestDone) {
-          this.handlePublisher();
-        }
+      if (
+        (this.isHostPresent() || event.connection.data === 'admin') &&
+        event.connection.connectionId === this.session.connection.connectionId
+      ) {
+        // if (this.precallTestDone) {
+        this.handlePublisher();
+        // }
       }
     });
 
@@ -124,11 +109,9 @@ export class Participant {
     });
 
     this.session.on('streamCreated', event => {
-      if (!this.precallTestDone) {
-        this.waitForTestToSubscribe(event.stream);
-      } else {
-        this.handleSubscriber(event.stream);
-      }
+      console.log('stream created in the session');
+
+      this.handleSubscriber(event.stream);
     });
 
     // initialize the publisher
@@ -226,17 +209,17 @@ export class Participant {
     this.waitingRoompublisher.publishAudio(this.hasAudio);
   }
 
-  async handleTest() {
-    try {
-      const result = await this.startTest();
-      this.precallTestDone = true;
-      console.log('host ' + t);
-      if (this.isHostPresent()) this.handlePublisher();
-      return result;
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // async handleTest() {
+  //   try {
+  //     const result = await this.startTest();
+  //     this.precallTestDone = true;
+  //     console.log('host ' + t);
+  //     if (this.isHostPresent()) this.handlePublisher();
+  //     return result;
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   connect() {
     this.session.connect(this.roomToken, error => {
@@ -248,30 +231,30 @@ export class Participant {
     });
   }
 
-  addTestResults(result) {
-    const classResult =
-      result.text === `You're all set!` ? 'alert-success' : 'alert-warning';
-    const precallResult = `
-          <div class="alert ${classResult} alert-dismissible fade show" role="alert">
-          ${result.text}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>`;
-    document
-      .getElementById('publisher')
-      .insertAdjacentHTML('beforeend', precallResult);
-    document.getElementById('progress').style.display = 'none';
-  }
+  // addTestResults(result) {
+  //   const classResult =
+  //     result.text === `You're all set!` ? 'alert-success' : 'alert-warning';
+  //   const precallResult = `
+  //         <div class="alert ${classResult} alert-dismissible fade show" role="alert">
+  //         ${result.text}
+  //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  //         </div>`;
+  //   document
+  //     .getElementById('publisher')
+  //     .insertAdjacentHTML('beforeend', precallResult);
+  //   document.getElementById('progress').style.display = 'none';
+  // }
 
-  handleTestProgressIndicator() {
-    const progressIndicator = setInterval(() => {
-      let currentProgress = document.getElementById('progress').value;
-      document.getElementById('progress').value += 5;
-      if (currentProgress === 100) {
-        clearInterval(progressIndicator);
-        document.getElementById('progress').value = 0;
-      }
-    }, 1000);
-  }
+  // handleTestProgressIndicator() {
+  //   const progressIndicator = setInterval(() => {
+  //     let currentProgress = document.getElementById('progress').value;
+  //     document.getElementById('progress').value += 5;
+  //     if (currentProgress === 100) {
+  //       clearInterval(progressIndicator);
+  //       document.getElementById('progress').value = 0;
+  //     }
+  //   }, 1000);
+  // }
 }
 
 // const basicUrl = 'http://localhost:3000';
