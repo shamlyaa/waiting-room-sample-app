@@ -1,8 +1,6 @@
 import { Host } from './Host';
 import { Participant } from './Participant';
 
-// host.sayHello();
-
 (() => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomName = urlParams.get('room');

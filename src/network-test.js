@@ -1,12 +1,10 @@
 import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
 
-export const startTest = () => {
+export const startTest = ({ apiKey, sessionId, token }) => {
   const otNetworkTest = new NetworkTest(OT, {
-    apiKey: '46264952', // Add the API key for your OpenTok project here.
-    sessionId:
-      '2_MX40NjI2NDk1Mn5-MTYyNTY1NjM5MzUxMn4ycTZWa0dJRzB3R3BRYW1JU1VER0JWcHh-fg', // Add a test session ID for that project
-    token:
-      'T1==cGFydG5lcl9pZD00NjI2NDk1MiZzaWc9NTVmZjU0YzgwYWVlM2QwMDJlM2U0ZjRmZThhOGUzYWVkNmMxNTQzNDpzZXNzaW9uX2lkPTJfTVg0ME5qSTJORGsxTW41LU1UWXlOVFkxTmpNNU16VXhNbjR5Y1RaV2EwZEpSekIzUjNCUllXMUpVMVZFUjBKV2NIaC1mZyZjcmVhdGVfdGltZT0xNjI1NjU2NDA3Jm5vbmNlPTAuNDg3MDc1MzkzNTg0Njg5OSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjI2MjYxMjA2JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9' // Add a token for that session here
+    apiKey: apiKey, // Add the API key for your OpenTok project here.
+    sessionId: sessionId, // Add a test session ID for that project
+    token: token
   });
 
   return new Promise((resolve, reject) => {
@@ -20,7 +18,6 @@ export const startTest = () => {
           })
           .then(results => {
             resolve(results);
-            // this.precallTestDone = true;
             // This function is called when the quality test is completed.
             console.log('OpenTok quality results', results);
             let publisherSettings = {};

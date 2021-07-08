@@ -10,6 +10,7 @@ import {
 import variables from './variables';
 let { usersConnected, connectionCount } = variables;
 import { startTest } from './network-test';
+import { getCredentials } from './credentials';
 
 // import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
 
@@ -27,18 +28,29 @@ export class Participant {
     this.roomToken = null;
   }
   init() {
-    this.getCredentials().then(data => {
-      this.initializeSession(data);
-      // this.startTest();
-      startTest().then(results => {
-        console.log(results);
-        this.precallTestDone = true;
-        console.log(usersConnected);
-        this.connect();
-        // if (this.isHostPresent()) this.handlePublisher();
-      });
-      this.registerEvents();
-    });
+    getCredentials(this.roomName, 'participant')
+      .then(data => {
+        this.roomToken = data.token;
+        // this.getCredentials().then(data => {
+        this.initializeSession(data);
+        // this.startTest();
+        getCredentials(`${this.roomName}-precall`, 'participant').then(
+          precallCreds => {
+            startTest(precallCreds)
+              .then(results => {
+                console.log(results);
+                this.precallTestDone = true;
+                console.log(usersConnected);
+                this.connect();
+                // if (this.isHostPresent()) this.handlePublisher();
+              })
+              .catch(e => console.log(e));
+          }
+        );
+
+        this.registerEvents();
+      })
+      .catch(e => console.log(e));
   }
 
   isHostPresent() {
@@ -65,29 +77,6 @@ export class Participant {
     });
   }
 
-  async getCredentials() {
-    // Default
-    try {
-      const url = `/api/room/${this.roomName}?role=participant`;
-      const config = {};
-      const response = await fetch(`${this.basicUrl}${url}`, config);
-      const data = await response.json();
-      console.log(data);
-      if (data.apiKey && data.sessionId && data.token) {
-        // roomApiKey = data.apiKey;
-        // roomSessionId = data.sessionId;
-        this.roomToken = data.token;
-        return Promise.resolve(data);
-      }
-      return Promise.reject(new Error('Credentials Not Valid'));
-    } catch (error) {
-      console.log(error.message);
-      return Promise.reject(error);
-    }
-  }
-
-  initControls() {}
-
   handleError(error) {
     if (error) {
       console.error(error);
@@ -108,7 +97,7 @@ export class Participant {
   }
 
   initializeSession(data) {
-    const { apiKey, sessionId, token } = data;
+    const { apiKey, sessionId } = data;
     this.session = OT.initSession(apiKey, sessionId);
 
     this.session.on('connectionCreated', event => {
@@ -174,15 +163,6 @@ export class Participant {
         this.isPublishing = false;
       }
     });
-
-    // Connect to the session
-    // this.session.connect(token, error => {
-    //   if (error) {
-    //     handleError(error);
-    //   } else {
-    //     console.log('Session Connected');
-    //   }
-    // });
   }
 
   handlePublisher() {

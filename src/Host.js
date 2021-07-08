@@ -8,6 +8,7 @@ import {
 
 import variables from './variables';
 let { usersConnected, connectionCount } = variables;
+import { getCredentials } from './credentials';
 
 export class Host {
   constructor(roomName) {
@@ -65,7 +66,8 @@ export class Host {
   }
 
   init() {
-    this.getCredentials().then(data => {
+    getCredentials(this.roomName, 'admin').then(data => {
+      // this.getCredentials().then(data => {
       this.initializeSession(data);
       this.registerEvents();
     });
