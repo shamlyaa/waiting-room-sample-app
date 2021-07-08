@@ -24,6 +24,7 @@ export class Participant {
     this.hasVideo = true;
     this.hasAudio = true;
     this.isPublishing = false;
+    this.roomToken = null;
   }
   init() {
     this.getCredentials().then(data => {
@@ -33,7 +34,8 @@ export class Participant {
         console.log(results);
         this.precallTestDone = true;
         console.log(usersConnected);
-        if (this.isHostPresent()) this.handlePublisher();
+        this.connect();
+        // if (this.isHostPresent()) this.handlePublisher();
       });
       this.registerEvents();
     });
@@ -74,7 +76,7 @@ export class Participant {
       if (data.apiKey && data.sessionId && data.token) {
         // roomApiKey = data.apiKey;
         // roomSessionId = data.sessionId;
-        // roomToken = data.token;
+        this.roomToken = data.token;
         return Promise.resolve(data);
       }
       return Promise.reject(new Error('Credentials Not Valid'));
@@ -174,28 +176,17 @@ export class Participant {
     });
 
     // Connect to the session
-    this.session.connect(token, error => {
-      if (error) {
-        handleError(error);
-      } else {
-        console.log('Session Connected');
-      }
-    });
-  }
-
-  handlePublisher() {
-    console.log('[handlePublish]');
     // this.session.connect(token, error => {
     //   if (error) {
     //     handleError(error);
     //   } else {
     //     console.log('Session Connected');
-    //     // if (!isPublishing && connectionCount > 1) {
-    //     //   this.session.publish(waitingRoompublisher, this.handleError);
-    //     // }
     //   }
     // });
+  }
 
+  handlePublisher() {
+    console.log('[handlePublish]');
     if (!this.isPublishing && connectionCount > 1) {
       this.session.publish(this.waitingRoompublisher, this.handleError);
     }
@@ -265,6 +256,16 @@ export class Participant {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  connect() {
+    this.session.connect(this.roomToken, error => {
+      if (error) {
+        handleError(error);
+      } else {
+        console.log('Session Connected');
+      }
+    });
   }
 
   addTestResults(result) {
