@@ -1,7 +1,8 @@
 import {
   refreshDeviceList,
   onVideoSourceChanged,
-  onAudioSourceChanged
+  onAudioSourceChanged,
+  isHostPresent
 } from './utils';
 import variables from './variables';
 let { usersConnected, connectionCount } = variables;
@@ -82,17 +83,17 @@ export class Participant {
       console.log('[connectionCreated]', connectionCount);
       usersConnected.push(event.connection);
       console.log(usersConnected);
-
-      // si este es el host o si el host esta, y no soy yo
-
-      if (
-        this.isHostPresent() ||
-        event.connection.data === 'admin'
-        //  &&
-        // event.connection.connectionId != this.session.connection.connectionId
-      ) {
-        // if (this.precallTestDone) {
+      console.log(isHostPresent() + ' is the host presence');
+      if (event.connection.data === 'admin') {
+        // if (isHostPresent()) {
         this.handlePublisher();
+
+        // } else {
+        // if (
+        //   event.connection.connectionId ===
+        //   this.session.connection.connectionId
+        // ) {
+        //   this.handlePublisher();
         // }
       }
     });
@@ -149,7 +150,8 @@ export class Participant {
 
   handlePublisher() {
     console.log('[handlePublish]');
-    if (!this.isPublishing && connectionCount > 1) {
+    console.log(this.isPublishing, connectionCount);
+    if (!this.isPublishing) {
       this.session.publish(this.waitingRoompublisher, this.handleError);
     } else return;
   }
@@ -208,50 +210,16 @@ export class Participant {
     this.waitingRoompublisher.publishAudio(this.hasAudio);
   }
 
-  // async handleTest() {
-  //   try {
-  //     const result = await this.startTest();
-  //     this.precallTestDone = true;
-  //     console.log('host ' + t);
-  //     if (this.isHostPresent()) this.handlePublisher();
-  //     return result;
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
-
   connect() {
     this.session.connect(this.roomToken, error => {
       if (error) {
         handleError(error);
       } else {
+        if (isHostPresent()) {
+          this.handlePublisher();
+        }
         console.log('Session Connected');
       }
     });
   }
-
-  // addTestResults(result) {
-  //   const classResult =
-  //     result.text === `You're all set!` ? 'alert-success' : 'alert-warning';
-  //   const precallResult = `
-  //         <div class="alert ${classResult} alert-dismissible fade show" role="alert">
-  //         ${result.text}
-  //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  //         </div>`;
-  //   document
-  //     .getElementById('publisher')
-  //     .insertAdjacentHTML('beforeend', precallResult);
-  //   document.getElementById('progress').style.display = 'none';
-  // }
-
-  // handleTestProgressIndicator() {
-  //   const progressIndicator = setInterval(() => {
-  //     let currentProgress = document.getElementById('progress').value;
-  //     document.getElementById('progress').value += 5;
-  //     if (currentProgress === 100) {
-  //       clearInterval(progressIndicator);
-  //       document.getElementById('progress').value = 0;
-  //     }
-  //   }, 1000);
-  // }
 }
