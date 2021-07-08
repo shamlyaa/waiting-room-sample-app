@@ -83,9 +83,13 @@ export class Participant {
       usersConnected.push(event.connection);
       console.log(usersConnected);
 
+      // si este es el host o si el host esta, y no soy yo
+
       if (
-        (this.isHostPresent() || event.connection.data === 'admin') &&
-        event.connection.connectionId === this.session.connection.connectionId
+        this.isHostPresent() ||
+        event.connection.data === 'admin'
+        //  &&
+        // event.connection.connectionId != this.session.connection.connectionId
       ) {
         // if (this.precallTestDone) {
         this.handlePublisher();
@@ -147,7 +151,7 @@ export class Participant {
     console.log('[handlePublish]');
     if (!this.isPublishing && connectionCount > 1) {
       this.session.publish(this.waitingRoompublisher, this.handleError);
-    }
+    } else return;
   }
 
   handleSubscriber(stream) {

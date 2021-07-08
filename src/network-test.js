@@ -1,5 +1,8 @@
 import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
-import { handleTestProgressIndicator } from './test-progress';
+import {
+  handleTestProgressIndicator,
+  removeProgressIndicator
+} from './test-progress';
 import { addConnectivityTestResults } from './connectivity-test-results';
 import { addQualityTestResults } from './quality-test-results';
 
@@ -29,6 +32,7 @@ export const startTest = ({ apiKey, sessionId, token }) => {
           })
           .then(results => {
             addQualityTestResults(results);
+            removeProgressIndicator();
             resolve(results);
             // This function is called when the quality test is completed.
             console.log('OpenTok quality results', results);
