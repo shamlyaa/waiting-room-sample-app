@@ -29,6 +29,10 @@ div {
   z-index: 10;
   height: calc(100vh - 90px);
 } */
+
+.alert {
+  z-index: 100;
+}
 #subscriber {
   position: absolute;
   left: 0;
