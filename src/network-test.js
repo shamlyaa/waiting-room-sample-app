@@ -13,10 +13,10 @@ export const startTest = ({ apiKey, sessionId, token }) => {
       apiKey: apiKey, // Add the API key for your OpenTok project here.
       sessionId: sessionId, // Add a test session ID for that project
       token: token
-    },
-    {
-      timeout: 30000
     }
+    // {
+    //   timeout: 30000
+    // }
   );
 
   return new Promise((resolve, reject) => {

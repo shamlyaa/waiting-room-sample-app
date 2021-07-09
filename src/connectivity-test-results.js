@@ -20,7 +20,7 @@ export const addConnectivityTestResults = results => {
   };
 
   const messageToShow = results.success
-    ? 'You can connect to our servers. We are checking expected quality...'
+    ? 'You can connect to our API, Messaging and Logging servers. We are checking expected quality...'
     : 'You can not connect to our servers';
 
   const precallResult = `

@@ -3,7 +3,7 @@ let progressBar = document.getElementById('progress');
 export const handleTestProgressIndicator = () => {
   const progressIndicator = setInterval(() => {
     let currentProgress = progressBar.value;
-    progressBar.value += 2.5;
+    progressBar.value += 3.3;
     if (currentProgress === 100) {
       clearInterval(progressIndicator);
       progressBar.value = 0;
