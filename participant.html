@@ -32,6 +32,11 @@
           and camera work while we check your connection.
         </div>
       </div>
+      <div id="publisher">
+        <progress id="progress" max="100" value="0"> 0% </progress>
+      </div>
+        <div id="subscriber"></div>
+        
 
       <div id="controls">
         <!-- <div class="iconButton" id="cameraButton"> -->
@@ -78,18 +83,47 @@
         </div>
 
         <div><progress id="audioMeter" max="100" value="0"> 0% </progress></div>
-      </div>
-    </div>
-    <div>
-      <div id="publisher">
-        <progress id="progress" max="100" value="0"> 0% </progress>
-        <!-- <figure>
+
+        <!-- <audio controls id="audio">
+          <source src="./Macarena.mp3" type="audio/mp3">
+        </audio> -->
+
+        <!-- <div class="dropdown">
+          <button class="speakerButton" id="speakerButton">
+            <img src="./icons/speaker-fill.svg" id="speakerIcon" alt="" width="100%" />
+          </button>
+
+          <select
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            id="audioInputs"
+            aria-labelledby="dropdownAudio"
+          >
+            <option class="dropdown-item" selected>Chango Audio source</option>
+            
+              <figure>
                 <figcaption>Listen to the T-Rex:</figcaption>
-                <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
+                <audio id="audio" controls src="./Macarena.mp3">
                   Your browser does not support the
                   <code>audio</code> element.
                 </audio>
-              </figure> -->
+              </figure> 
+            
+          </select>
+        </div> -->
+      </div>
+    </div>
+    <div>
+      
+        <!-- <figure>
+                <figcaption>Listen to the T-Rex:</figcaption>
+                <audio id="audio" controls src="./Macarena.mp3">
+                  Your browser does not support the
+                  <code>audio</code> element.
+                </audio>
+              </figure>  -->
         <!-- </div>
             <figure>
               <figcaption>Listen to the T-Rex:</figcaption>
@@ -98,7 +132,7 @@
                 <code>audio</code> element.
               </audio>
             </figure>
-          </div> -->
+          </div>
       </div>
 
       <div id="subscriber"></div>

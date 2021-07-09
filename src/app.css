@@ -89,6 +89,13 @@ select {
 .dropdown {
   width: 10%;
 }
+.qualityData {
+  margin: 2px;
+  padding: 3px;
+}
+.mediaSupported {
+  margin-left: 10px;
+}
 
 #controls {
   background-color: black;

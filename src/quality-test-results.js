@@ -28,11 +28,23 @@ export const addQualityTestResults = results => {
 
   const precallResult = `
           <div class="alert ${classResult} alert-dismissible fade show alert-centered" role="alert">
-          <div>Quality check : Done</div>
-          <div>Audio Supported : ${results.audio.supported}</div>
-          <div>Audio Kbps : ${Math.round(results.audio?.bitrate) / 1000}</div>
-          <div>Video Supported : ${results.video.supported}</div>
-          <div>Video Kbps : ${Math.round(results.video?.bitrate) / 1000}</div>
+          <div class="qualityData">Quality check : Done</div>
+          <div class="qualityData">Audio Supported : ${
+            results.audio.supported
+          } <img src="${
+    results.audio.supported ? '/icons/check-lg.svg' : '/icons/x-lg.svg'
+  }" class="mediaSupported" alt="" width="6%" />
+          </div>
+          <div class="qualityData">Audio Kbps : ${Math.round(
+            results.audio?.bitrate
+          ) / 1000}</div>
+          <div class="qualityData">Video Supported : 
+          ${results.video.supported} <img src="${
+    results.video.supported ? '/icons/check-lg.svg' : '/icons/x-lg.svg'
+  }" class="mediaSupported" alt="" width="6%" /></div>
+          <div class="qualityData">Video Kbps : ${Math.round(
+            results.video?.bitrate
+          ) / 1000}</div>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`;
 

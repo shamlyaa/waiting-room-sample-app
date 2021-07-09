@@ -20,7 +20,7 @@ export const addConnectivityTestResults = results => {
   };
 
   const messageToShow = results.success
-    ? 'You can connect to our servers'
+    ? 'You can connect to our servers. We are checking expected quality...'
     : 'You can not connect to our servers';
 
   const precallResult = `
@@ -35,7 +35,7 @@ export const addConnectivityTestResults = results => {
   document.getElementById('message').innerHTML =
     '<ul>' +
     message
-      .map(function(error) {
+      .map(error => {
         return '<li>' + error + '</li>';
       })
       .join('');
