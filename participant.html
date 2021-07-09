@@ -28,19 +28,18 @@
       <div id="banner">
         <!-- <h1><span class="badge bg-secondary">You're on the waiting Room. Please wait for the host to join</span></h1> -->
         <div class="alert alert-dark" role="alert">
-          You will be connected once the host joins. In the meantime, please make sure that your microphone
-          and camera work while we check your connection.
+          You will be connected once the host joins. In the meantime, please
+          make sure that your microphone and camera work while we check your
+          connection.
         </div>
       </div>
       <div id="publisher">
         <progress id="progress" max="100" value="0"> 0% </progress>
       </div>
-        <div id="subscriber"></div>
-        
+      <div id="subscriber"></div>
 
       <div id="controls">
-        <!-- <div class="iconButton" id="cameraButton"> -->
-        <!-- <div class="dropdown">
+        <div class="btn-group">
           <button class="iconButton" id="cameraButton">
             <img
               src="./icons/camera-video-fill.svg"
@@ -50,139 +49,34 @@
             />
           </button>
           <select
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdwon"
-            aria-expanded="false"
+            class="btn btn-secondary dropdown-toggle  dropdown-toggle-split"
             id="videoInputs"
-            aria-labelledby="dropdownMenuVideo"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            data-bs-reference="parent"
           >
-            <option class="dropdown-item" selected>Chango video source</option>
+            <option selected class="dropdown-item">Edit</option>
           </select>
-        </div> -->
-
-        <div class="btn-group">
-            <button class="iconButton" id="cameraButton">
-                <img
-                  src="./icons/camera-video-fill.svg"
-                  id="cameraIcon"
-                  alt=""
-                  width="100%"
-                />
-              </button>
-            <!-- <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-              <span >Edit</span>
-            </button> -->
-            <select class="btn btn-secondary dropdown-toggle  dropdown-toggle-split" id="videoInputs" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-                <option selected class="dropdown-item" >Edit</option>
-            </select>
         </div>
 
-        <!-- <button class="iconButton" id="micButton">
-          <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
-        </button> -->
-
-        <!-- <div class="dropdown">
-          <button class="iconButton" id="micButton">
-            <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
-          </button>
-
-          <select
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            id="audioInputs"
-            aria-labelledby="dropdownAudio"
-          >
-            <option class="dropdown-item" selected>Chango Audio source</option>
-          </select>
-        </div> -->
-
         <div class="btn-group">
           <button class="iconButton" id="micButton">
             <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
           </button>
-          <!-- <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-            <span >Edit</span>
-          </button> -->
-          <select class="btn btn-secondary dropdown-toggle  dropdown-toggle-split"aria-labelledby="audioInputs" id="audioInputs" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-              <option selected class="dropdown-item" >Edit</option>
-          </select>
-
-          <!-- <select
-            class="dropdown-menu"
-            type="button"
+          <select
+            class="btn btn-secondary dropdown-toggle  dropdown-toggle-split"
+            aria-labelledby="audioInputs"
+            id="audioInputs"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            id="audioInputs"
-            aria-labelledby="dropdownMenuReference"
+            data-bs-reference="parent"
           >
-          <option class="dropdown-item" selected>Chango Audio source</option>
-        </select> -->
-          <!-- <ul class="dropdown-menu" id="audioInputs" aria-labelledby="dropdownMenuReference">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Separated link</a></li>
-          </ul> -->
+            <option selected class="dropdown-item">Edit</option>
+          </select>
         </div>
 
         <div><progress id="audioMeter" max="100" value="0"> 0% </progress></div>
-
-        <!-- <audio controls id="audio">
-          <source src="./Macarena.mp3" type="audio/mp3">
-        </audio> -->
-
-        <!-- <div class="dropdown">
-          <button class="speakerButton" id="speakerButton">
-            <img src="./icons/speaker-fill.svg" id="speakerIcon" alt="" width="100%" />
-          </button>
-
-          <select
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            id="audioInputs"
-            aria-labelledby="dropdownAudio"
-          >
-            <option class="dropdown-item" selected>Chango Audio source</option>
-            
-              <figure>
-                <figcaption>Listen to the T-Rex:</figcaption>
-                <audio id="audio" controls src="./Macarena.mp3">
-                  Your browser does not support the
-                  <code>audio</code> element.
-                </audio>
-              </figure> 
-            
-          </select>
-        </div> -->
       </div>
-    </div>
-    <div>
-      
-        <!-- <figure>
-                <figcaption>Listen to the T-Rex:</figcaption>
-                <audio id="audio" controls src="./Macarena.mp3">
-                  Your browser does not support the
-                  <code>audio</code> element.
-                </audio>
-              </figure>  -->
-        <!-- </div>
-            <figure>
-              <figcaption>Listen to the T-Rex:</figcaption>
-              <audio id="audio" controls src="./file_example_MP3_700KB.mp3">
-                Your browser does not support the
-                <code>audio</code> element.
-              </audio>
-            </figure>
-          </div>
-      </div>
-
-      <div id="subscriber"></div>
     </div>
   </body>
 </html>
