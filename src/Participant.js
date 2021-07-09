@@ -85,16 +85,7 @@ export class Participant {
       console.log(usersConnected);
       console.log(isHostPresent() + ' is the host presence');
       if (event.connection.data === 'admin') {
-        // if (isHostPresent()) {
         this.handlePublisher();
-
-        // } else {
-        // if (
-        //   event.connection.connectionId ===
-        //   this.session.connection.connectionId
-        // ) {
-        //   this.handlePublisher();
-        // }
       }
     });
 

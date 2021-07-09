@@ -1,10 +1,11 @@
 import { ErrorNames } from 'opentok-network-test-js';
+import { removeProgressIndicator } from './test-progress';
 export const addConnectivityTestResults = results => {
   const classResult = results.success ? 'alert-success' : 'alert-warning';
   let message = [];
   console.log(ErrorNames);
-
-  if (results.failedTests) {
+  if (results.failedTests && results.failedTests.length > 0) {
+    removeProgressIndicator();
     results.failedTests.forEach(failedTest => {
       console.log(failedTest.error.name);
       message.push(failedTest.error.message);
@@ -12,7 +13,7 @@ export const addConnectivityTestResults = results => {
   }
 
   const addErrorList = message => {
-    message
+    return message
       .map(function(error) {
         return '<li>' + error + '</li>';
       })
@@ -33,12 +34,5 @@ export const addConnectivityTestResults = results => {
     .getElementById('banner')
     .insertAdjacentHTML('beforeend', precallResult);
   document.getElementById('message').innerHTML =
-    '<ul>' +
-    message
-      .map(error => {
-        return '<li>' + error + '</li>';
-      })
-      .join('');
-  +'</ul>';
-  //   document.getElementById('progress').style.display = 'none';
+    '<ul>' + addErrorList(message) + '</ul>';
 };

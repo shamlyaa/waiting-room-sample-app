@@ -84,8 +84,11 @@ div {
 }
 
 select {
-  width: 10%;
+  /* width: 10%; */
+  margin: auto;
+  height: 50%;
 }
+
 .dropdown {
   width: 10%;
 }

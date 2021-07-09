@@ -40,7 +40,7 @@
 
       <div id="controls">
         <!-- <div class="iconButton" id="cameraButton"> -->
-        <div class="dropdown">
+        <!-- <div class="dropdown">
           <button class="iconButton" id="cameraButton">
             <img
               src="./icons/camera-video-fill.svg"
@@ -59,13 +59,30 @@
           >
             <option class="dropdown-item" selected>Chango video source</option>
           </select>
+        </div> -->
+
+        <div class="btn-group">
+            <button class="iconButton" id="cameraButton">
+                <img
+                  src="./icons/camera-video-fill.svg"
+                  id="cameraIcon"
+                  alt=""
+                  width="100%"
+                />
+              </button>
+            <!-- <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+              <span >Edit</span>
+            </button> -->
+            <select class="btn btn-secondary dropdown-toggle  dropdown-toggle-split" id="videoInputs" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+                <option selected class="dropdown-item" >Edit</option>
+            </select>
         </div>
 
         <!-- <button class="iconButton" id="micButton">
           <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
         </button> -->
 
-        <div class="dropdown">
+        <!-- <div class="dropdown">
           <button class="iconButton" id="micButton">
             <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
           </button>
@@ -80,6 +97,36 @@
           >
             <option class="dropdown-item" selected>Chango Audio source</option>
           </select>
+        </div> -->
+
+        <div class="btn-group">
+          <button class="iconButton" id="micButton">
+            <img src="./icons/mic-fill.svg" id="micIcon" alt="" width="100%" />
+          </button>
+          <!-- <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+            <span >Edit</span>
+          </button> -->
+          <select class="btn btn-secondary dropdown-toggle  dropdown-toggle-split"aria-labelledby="audioInputs" id="audioInputs" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+              <option selected class="dropdown-item" >Edit</option>
+          </select>
+
+          <!-- <select
+            class="dropdown-menu"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            id="audioInputs"
+            aria-labelledby="dropdownMenuReference"
+          >
+          <option class="dropdown-item" selected>Chango Audio source</option>
+        </select> -->
+          <!-- <ul class="dropdown-menu" id="audioInputs" aria-labelledby="dropdownMenuReference">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Separated link</a></li>
+          </ul> -->
         </div>
 
         <div><progress id="audioMeter" max="100" value="0"> 0% </progress></div>
