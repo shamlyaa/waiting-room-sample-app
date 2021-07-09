@@ -52,6 +52,10 @@ export class Host {
     document.getElementById('micButton').addEventListener('click', () => {
       this.toggleAudio();
     });
+
+    document.getElementById('endCallButton').addEventListener('click', e => {
+      this.disconnectAll();
+    });
     navigator.mediaDevices.ondevicechange = () => {
       refreshDeviceList(this.publisher);
     };
@@ -172,19 +176,15 @@ export class Host {
   }
 
   disconnectAll() {
-    handlePublisher(publisher);
+    this.handlePublisher(publisher);
     usersConnected.map(connection => {
       console.log('disconnecting ' + connection.id);
       // if (connection != session.connection.id) {
 
-      session.forceDisconnect(connection);
+      this.session.forceDisconnect(connection);
       // }
     });
   }
-
-  // document.getElementById('endCallButton').addEventListener('click', () => {
-  //       disconnectAll();
-  //     });
 
   calculateAudioLevel(audioLevel) {
     let movingAvg = null;

@@ -12,6 +12,12 @@ div {
   margin: 0;
 }
 
+#UsersNumber {
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+
 .alert-centered {
   z-index: 100;
   margin: auto;
