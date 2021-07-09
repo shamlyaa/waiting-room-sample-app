@@ -2,8 +2,6 @@
 
 This application will show you how to implement a waiting room (wait for the host to join). It also showcases best practices to improve the pre-call user experience. The app lets you change the audio and video devices, it will show a progress bar moving as you speak to make sure that your microphone works and it will run a pre-call test before connecting you to the session. You will see the results on screen once the test is completed.
 
-![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/precall-result.png)
-
 ### Setup (Local)
 
 1. clone this repo.
@@ -21,6 +19,9 @@ Navigate to http://localhost:3000/participant?room=${roomName} to join a session
 Participants won't be connected to the session until the pre-call test is completed, but they will be able to choose the devices to use during the call. A participant won't publish into the session unless there's a host present. The participants will see the results of the pre-call test as they become available. There's an audio level indicator in the form of a progress bar that indicates the speaker audio Levels. The idea is that once a participant joins a session with a host, they've made sure that they're using the right and working device (camera and mic), they have connectivity to our Servers (API, Media, Logging) and their bitrate supports Audio and Video.
 
 If a participant joins the session, and there's no host connected yet, they will remain connected until the host joins the session. If a participant joins the session and there's at least one host connected, they will start publishing.
+
+![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/precall-inprogress.png)
+![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/precall-result.png)
 
 ### Host
 
