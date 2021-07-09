@@ -35,13 +35,14 @@ The server (index.js) is a basic nodeJS express server that serves two HTML file
 
 ## Client side
 
-The application uses webpack to bundle all Javascript files together and make the application more scalable and easier to understand.
+The application uses [Webpack](https://webpack.js.org/) to bundle all Javascript files together and make the application more scalable and easier to understand. It also uses [Boostrap](https://getbootstrap.com/) to simplify the UI design process.
 
 All the Javascript files are within the /src folder:
--The main entry point is index.js. This file will get the roomName out of the URL and depending on the route visited, will create an instance of Host or Participant. It will then initialise the process.
--There is a Host Class and a Participant Class. Each of these files follow a different logic as mentioned above
--utils.js is a file with some utilities used by both Host and Participants. It also contains the logic used for device selection and change.
--credentials.js contains the logic necessary to request credentials for the Host, Participant and the precall test.
--network-test.js contains the logic to run the pre-call test. It uses [OpenTok Network Test](https://www.npmjs.com/package/opentok-network-test-js). The running time of the test is set by default to around 30 seconds. The longer it runs, the more accurate results, you will get.
--quality-test-results.js and connectivity-test-results are two files to parse the results and show the results to the participant on screen
--test-progress.js contains some utility to show and hide the progress of the pre-call test.
+
+- The main entry point is index.js. This file will get the roomName out of the URL and depending on the route visited, will create an instance of Host or Participant. It will then initialise the process.
+  -T here is a Host Class and a Participant Class. Each of these files follow a different logic as mentioned above
+- utils.js is a file with some utilities used by both Host and Participants. It also contains the logic used for device selection and change.
+- credentials.js contains the logic necessary to request credentials for the Host, Participant and the precall test.
+- network-test.js contains the logic to run the pre-call test. It uses [OpenTok Network Test](https://www.npmjs.com/package/opentok-network-test-js). The running time of the test is set by default to around 30 seconds. The longer it runs, the more accurate results, you will get.
+- quality-test-results.js and connectivity-test-results are two files to parse the results and show the results to the participant on screen
+- test-progress.js contains some utility to show and hide the progress of the pre-call test.
