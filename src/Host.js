@@ -1,7 +1,5 @@
 import {
   refreshDeviceList,
-  // usersConnected,
-  // connectionCount,
   onVideoSourceChanged,
   onAudioSourceChanged
 } from './utils';
@@ -9,6 +7,7 @@ import {
 import variables from './variables';
 let { usersConnected, connectionCount } = variables;
 import { getCredentials } from './credentials';
+import { calculateAudioLevel } from './audioLevels';
 
 export class Host {
   constructor(roomName) {
@@ -147,7 +146,7 @@ export class Host {
       this.isPublishing = false;
     });
     this.publisher.on('audioLevelUpdated', event => {
-      this.calculateAudioLevel(event.audioLevel);
+      calculateAudioLevel(event.audioLevel);
     });
     this.publisher.on('accessAllowed', () => {
       refreshDeviceList(this.publisher);
@@ -184,24 +183,6 @@ export class Host {
       this.session.forceDisconnect(connection);
       // }
     });
-  }
-
-  calculateAudioLevel(audioLevel) {
-    let movingAvg = null;
-    if (movingAvg === null || movingAvg <= audioLevel) {
-      movingAvg = audioLevel;
-    } else {
-      movingAvg = 0.8 * movingAvg + 0.2 * audioLevel;
-    }
-    // console.log(movingAvg);
-    // 1.5 scaling to map the -30 - 0 dBm range to [0,1]
-    const currentLogLevel = Math.log(movingAvg) / Math.LN10 / 1.5 + 1;
-    this.setLogLevel(Math.min(Math.max(currentLogLevel, 0), 1) * 100);
-    // console.log(Math.min(Math.max(currentLogLevel, 0), 1) * 100);
-  }
-
-  setLogLevel(logLevel) {
-    document.getElementById('audioMeter').value = logLevel;
   }
 
   toggleVideo() {
