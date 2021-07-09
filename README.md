@@ -1,5 +1,7 @@
 # Waiting Room and Pre-call Best Practices
 
+![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/both.png)
+
 This application will show you how to implement a waiting room (wait for the host to join). It also showcases best practices to improve the pre-call user experience. The app lets you change the audio and video devices, it will show a progress bar moving as you speak to make sure that your microphone works and it will run a pre-call test before connecting you to the session. You will see the results on screen once the test is completed.
 
 ### Setup (Local)
@@ -27,6 +29,8 @@ If a participant joins the session, and there's no host connected yet, they will
 
 Navigate to http://localhost:3000/host?room=${roomName} to join a session as a Host. Bear in mind that so that two users (participants or hosts) can join the same session, they need to be on the same room.
 For the sake of simplicity, the app doesn't run a pre-call test on the host, but the same logic as the participant would apply. The host gets connected and start publishing into the session immediately. If there are participants waiting for the host, they will also start publishing once the host connects to the session. The host has an extra button on the toolbar to terminate the call for all participants. Upon click, all active connections will be disconnected.
+
+![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/host.png)
 
 # Application Structure
 
