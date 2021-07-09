@@ -1,9 +1,3 @@
-/* body,
-html {
-  background-color: gray;
-  height: 100%;
-} */
-
 html,
 body {
   height: 100%;
@@ -17,18 +11,6 @@ div {
   -webkit-box-sizing: border-box;
   margin: 0;
 }
-/* .dropdown {
-  width: 20%;
-} */
-/* #subscriber {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-
-  z-index: 10;
-  height: calc(100vh - 90px);
-} */
 
 .alert-centered {
   z-index: 100;
@@ -71,10 +53,7 @@ div {
   /* border: 3px solid white; */
   border-radius: 3px;
 }
-#audioVideoSettings {
-  display: flex;
-  flex-direction: column;
-}
+
 #audioMeter {
   transform: rotate(-90deg);
   width: 45px;
@@ -84,7 +63,6 @@ div {
 }
 
 select {
-  /* width: 10%; */
   margin: auto;
   height: 50%;
 }
