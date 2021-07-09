@@ -7,17 +7,11 @@ import { addConnectivityTestResults } from './connectivity-test-results';
 import { addQualityTestResults } from './quality-test-results';
 
 export const startTest = ({ apiKey, sessionId, token }) => {
-  const otNetworkTest = new NetworkTest(
-    OT,
-    {
-      apiKey: apiKey, // Add the API key for your OpenTok project here.
-      sessionId: sessionId, // Add a test session ID for that project
-      token: token
-    }
-    // {
-    //   timeout: 30000
-    // }
-  );
+  const otNetworkTest = new NetworkTest(OT, {
+    apiKey: apiKey, // Add the API key for your OpenTok project here.
+    sessionId: sessionId, // Add a test session ID for that project
+    token: token
+  });
 
   return new Promise((resolve, reject) => {
     otNetworkTest

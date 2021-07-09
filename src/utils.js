@@ -1,5 +1,5 @@
 import variables from './variables';
-const { usersConnected, connectionCount } = variables;
+const { usersConnected } = variables;
 
 export const isHostPresent = () => {
   if (usersConnected.find(e => e.data === 'admin')) {
@@ -8,8 +8,6 @@ export const isHostPresent = () => {
     return false;
   }
 };
-
-// export { connectionCount, usersConnected };
 
 export const refreshDeviceList = pub => {
   console.log('refreshDeviceList');
