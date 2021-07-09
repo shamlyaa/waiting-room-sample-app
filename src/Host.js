@@ -123,7 +123,8 @@ export class Host {
       width: '100%',
       height: '100%',
       publishAudio: true,
-      publishVideo: true
+      publishVideo: true,
+      style: { buttonDisplayMode: 'off' }
     };
 
     this.publisher = OT.initPublisher(
