@@ -5,7 +5,7 @@ import {
   isHostPresent
 } from './utils';
 
-import { calculateAudioLevel, setLogLevel } from './audioLevels';
+import { calculateAudioLevel } from './audioLevels';
 import variables from './variables';
 let { usersConnected, connectionCount } = variables;
 import { startTest } from './network-test';

@@ -6,24 +6,6 @@ export const addQualityTestResults = results => {
       : 'alert-warning';
   let message = [];
 
-  let publisherSettings = {};
-  if (results.video.reason) {
-    console.log('Video not supported:', results.video.reason);
-    publisherSettings.videoSource = null; // audio-only
-  } else {
-    publisherSettings.frameRate = results.video.recommendedFrameRate;
-    publisherSettings.resolution = results.video.recommendedResolution;
-  }
-  if (!results.audio.supported) {
-    console.log('Audio not supported:', results.audio.reason);
-    // video-only, but you probably don't want this -- notify the user?
-  }
-  if (!publisherSettings.videoSource && !publisherSettings.audioSource) {
-    // Do not publish. Notify the user.
-  } else {
-    // Publish to the "real" session, using the publisherSettings object.
-  }
-
   console.log(message);
 
   const precallResult = `

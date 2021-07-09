@@ -5,6 +5,7 @@ import {
 } from './test-progress';
 import { addConnectivityTestResults } from './connectivity-test-results';
 import { addQualityTestResults } from './quality-test-results';
+import { displayQualityError } from './quality-test-error';
 
 export const startTest = ({ apiKey, sessionId, token }) => {
   const otNetworkTest = new NetworkTest(OT, {
@@ -32,6 +33,7 @@ export const startTest = ({ apiKey, sessionId, token }) => {
             console.log('OpenTok quality results', results);
           })
           .catch(error => {
+            displayQualityError(error);
             console.log('OpenTok quality test error', error);
           });
       })
