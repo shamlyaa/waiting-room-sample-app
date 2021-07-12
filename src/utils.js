@@ -49,7 +49,7 @@ export const refreshDeviceList = pub => {
 
   listAudioInputs().then(devices => {
     const audioSelect = document.getElementById('audioInputs');
-    //  audioSelect.innerHTML = '';
+    audioSelect.innerHTML = '';
     const currentAudioSource = pub.getAudioSource();
     console.log(devices);
 
