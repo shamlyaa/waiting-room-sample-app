@@ -2,7 +2,7 @@
 
 ![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/both-participants.png)
 
-This application will show you how to implement a waiting room (wait for the host to join). It also showcases best practices to improve the pre-call user experience. The app lets you change the audio and video devices, it will show a progress bar moving as you speak to make sure that your microphone works and it will run a pre-call test before connecting you to the session. You will see the results on screen once the test is completed.
+This application will show you how to implement a waiting room (wait for the host to join). It also showcases best practices to improve the pre-call user experience. The app lets you change the audio and video devices and will update the list of devices available if there's a device plugged/unplugged during the call. It will show a progress bar moving as you speak to make sure that your microphone works and it will run a pre-call test before connecting you to the session. You will see the results on screen once the test is completed.
 
 ### Setup (Local)
 
@@ -32,7 +32,7 @@ For the sake of simplicity, the app doesn't run a pre-call test on the host, but
 
 ![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/host.png)
 
-# Application Structure
+## Application Structure
 
 ## Server side
 
@@ -51,3 +51,8 @@ All the Javascript files are within the /src folder:
 - network-test.js contains the logic to run the pre-call test. It uses [OpenTok Network Test](https://www.npmjs.com/package/opentok-network-test-js). The running time of the test is set by default to around 30 seconds. The longer it runs, the more accurate results, you will get.
 - quality-test-results.js and connectivity-test-results are two files to parse the results and show the results to the participant on screen
 - test-progress.js contains some utility to show and hide the progress of the pre-call test.
+- quality-test-error.js handles the logic to display the result of a failed quality test
+
+## Pre-call test
+
+We will use the [network test](https://www.npmjs.com/package/opentok-network-test-js) npm module to check that the participant has connectivity to Vonage Video API logging, messaging, media, and API servers; as well as to check expected quality during the call. For the sake of simplicity, we will only run a precall test on our participants but not on the Host. The precall test results also provide a recommended resolution and a [MOS score](https://www.npmjs.com/package/opentok-network-test-js#mos-estimates) from 0 to 4.5. Given that this is a bit subjective, we will add the ability to decide whether we want to display the preferred Resolution and a result label based on the MOS score i.e. (Good, Bad, Excellent..). You can decide whether to include the recommended resolution and the score label by toggling the `addFeedback` variable under /src/variables.js.
