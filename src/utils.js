@@ -95,7 +95,6 @@ export const onVideoSourceChanged = async (event, publisher) => {
 export const onAudioSourceChanged = async (event, publisher) => {
   const labelToFind = event.target.value;
   const audioDevices = await listAudioInputs();
-  console.log('aqui estan' + audioDevices);
 
   const deviceId = audioDevices.find(e => e.label === labelToFind)?.deviceId;
 

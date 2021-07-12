@@ -57,6 +57,9 @@ export class Participant {
     document.getElementById('videoInputs').addEventListener('change', e => {
       onVideoSourceChanged(e, this.waitingRoompublisher);
     });
+    navigator.mediaDevices.ondevicechange = () => {
+      refreshDeviceList(this.waitingRoompublisher);
+    };
 
     document.getElementById('audioInputs').addEventListener('change', e => {
       onAudioSourceChanged(e, this.waitingRoompublisher);
