@@ -1,14 +1,15 @@
 import { ErrorNames } from 'opentok-network-test-js';
 
+import variables from './variables';
+const { addFeedback } = variables;
+
 export const addQualityTestResults = results => {
   const classResult =
     results.audio.supported && results.video.supported
       ? 'alert-success'
       : 'alert-warning';
-  let message = [];
 
-  console.log(message);
-  const addFeedback = false;
+  console.log(addFeedback);
 
   const getFeedbackLabel = mos => {
     if (mos) {

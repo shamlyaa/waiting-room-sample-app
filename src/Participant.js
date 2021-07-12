@@ -80,7 +80,6 @@ export class Participant {
       console.log('[connectionCreated]', connectionCount);
       usersConnected.push(event.connection);
       console.log(usersConnected);
-      console.log(isHostPresent() + ' is the host presence');
       if (event.connection.data === 'admin') {
         this.handlePublisher();
       }

@@ -1,4 +1,5 @@
 export default {
   connectionCount: 0,
-  usersConnected: []
+  usersConnected: [],
+  addFeedback: true
 };
