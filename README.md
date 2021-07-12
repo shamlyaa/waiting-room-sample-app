@@ -24,6 +24,7 @@ If a participant joins the session, and there's no host connected yet, they will
 
 ![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/precall-inprogress.png)
 ![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/precall-result.png)
+![Pre-call result](https://raw.githubusercontent.com/nexmo-se/waiting-room-sample-app/main/src/images/precall-failed.png)
 
 ### Host
 
