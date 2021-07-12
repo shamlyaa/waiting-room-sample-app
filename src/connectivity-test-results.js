@@ -1,9 +1,7 @@
-import { ErrorNames } from 'opentok-network-test-js';
 import { removeProgressIndicator } from './test-progress';
 export const addConnectivityTestResults = results => {
   const classResult = results.success ? 'alert-success' : 'alert-warning';
   let message = [];
-  console.log(ErrorNames);
   if (results.failedTests && results.failedTests.length > 0) {
     removeProgressIndicator();
     results.failedTests.forEach(failedTest => {

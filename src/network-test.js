@@ -1,4 +1,4 @@
-import NetworkTest, { ErrorNames } from 'opentok-network-test-js';
+import NetworkTest from 'opentok-network-test-js';
 import {
   handleTestProgressIndicator,
   removeProgressIndicator
@@ -9,8 +9,8 @@ import { displayQualityError } from './quality-test-error';
 
 export const startTest = ({ apiKey, sessionId, token }) => {
   const otNetworkTest = new NetworkTest(OT, {
-    apiKey: apiKey, // Add the API key for your OpenTok project here.
-    sessionId: sessionId, // Add a test session ID for that project
+    apiKey: apiKey,
+    sessionId: sessionId,
     token: token
   });
 
