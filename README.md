@@ -4,6 +4,13 @@
 
 This application will show you how to implement a waiting room (wait for the host to join). It also showcases best practices to improve the pre-call user experience. The app lets you change the audio and video devices and will update the list of devices available if there's a device plugged/unplugged during the call. It will show a progress bar moving as you speak to make sure that your microphone works and it will run a pre-call test before connecting you to the session. You will see the results on screen once the test is completed. The UI is not optimized for more than 2 participants, but the logic is valid for a multiparty call as well.
 
+### Context
+
+When developing your own video conferencing solution, it is vital to offer a good pre-call experience. Ensure that the user can choose the audio and video devices to use, check that the microphone detects your speech and that your network strength is good enough.
+Checking all these boxes will help you build a more robust application and catch some issues that will hopefully reduce some friction with the end-users of your application.
+
+It is also very common these days to have different roles in your application; if you operate in the health, education or webinar space, you may want to have a moderator. In this application, you can see how to make the rest of the participants wait for the moderator to join the session until they start publishing.
+
 ### Setup (Local)
 
 1. clone this repo.
@@ -41,13 +48,14 @@ The server (index.js) is a basic nodeJS express server that serves two HTML file
 
 ## Client side
 
-The application uses [Webpack](https://webpack.js.org/) to bundle all Javascript files together and make the application more scalable and easier to understand. It also uses [Boostrap](https://getbootstrap.com/) to simplify the UI design process.
+The application uses [Webpack](https://webpack.js.org/) to bundle all Javascript files together and make the application more scalable and easier to understand. It also uses [Bootstrap](https://getbootstrap.com/) to simplify the UI design process.
 
 All the Javascript files are within the /src folder:
 
 - The main entry point is index.js. This file will get the roomName out of the URL and depending on the route visited, will create an instance of Host or Participant. It will then initialise the process.
-  -T here is a Host Class and a Participant Class. Each of these files follow a different logic as mentioned above
+- There is a Host Class and a Participant Class. Each of these files follow a different logic as mentioned above
 - utils.js is a file with some utilities used by both Host and Participants. It also contains the logic used for device selection and change.
+- audioLevels.js this file contains the logic necessary for updating the microphone level indicator as you speak.
 - credentials.js contains the logic necessary to request credentials for the Host, Participant and the precall test.
 - network-test.js contains the logic to run the pre-call test. It uses [OpenTok Network Test](https://www.npmjs.com/package/opentok-network-test-js). The running time of the test is set by default to around 30 seconds. The longer it runs, the more accurate results, you will get.
 - quality-test-results.js and connectivity-test-results are two files to parse the results and show the results to the participant on screen

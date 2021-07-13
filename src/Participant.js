@@ -91,7 +91,6 @@ export class Participant {
       usersConnected = usersConnected.filter(connection => {
         return connection.id != event.connection.id;
       });
-      connectionCount -= 1;
       console.log(usersConnected);
     });
 
