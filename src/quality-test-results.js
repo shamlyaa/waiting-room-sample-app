@@ -1,5 +1,3 @@
-import { ErrorNames } from 'opentok-network-test-js';
-
 import variables from './variables';
 const { addFeedback } = variables;
 
