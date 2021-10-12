@@ -37,12 +37,12 @@ const sendSessionInfo = (res, session, role) => {
 
   const token = opentok.generateToken(session.sessionId, {
     data: `${role}`,
-    role: role === 'admin' ? 'moderator' : 'publisher'
+    role: role === 'admin' ? 'moderator' : 'publisher',
   });
   res.json({
     apiKey,
     sessionId: session.sessionId,
-    token
+    token,
   });
 };
 

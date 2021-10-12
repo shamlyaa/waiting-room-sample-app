@@ -16,7 +16,7 @@ It is also very common these days to have different roles in your application; i
 1. clone this repo.
 2. run `npm install`.
 3. setup `.env` according to `.env.example`.
-4. run `npm install`.
+4. run `npm start`.
 5. run `node index.js`.
 6. Navigate to http://localhost:3000/participant?room=${roomName} for a participant and http://localhost:3000/host?room=${roomName} for the host
 
